@@ -88,13 +88,13 @@ body {
 
 .guess-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(auto, 3.5em));
+    grid-template-columns: repeat(5, 3.5em);
     grid-auto-rows: 3.5em;
     gap: 0.25em;
     justify-content: center;
     align-content: center;
     flex-grow: 1;
-    padding: 3rem;
+    padding: 1.5rem;
 }
 
 .tile {
