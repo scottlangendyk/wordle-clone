@@ -11,6 +11,7 @@ gameLoop();
 
 function startInteraction() {
     document.addEventListener('click', handleClick);
+    document.addEventListener('click', captureKey);
     document.addEventListener('keydown', handleKeyPress);
     document.addEventListener('keydown', captureKey);
 }
@@ -37,15 +38,14 @@ function handleKeyPress(e) {
 function handleClick(e) {
     const key = e.target.dataset.key;
     if (key === undefined) return;
-    else if (key === 'enter') {
+    else if (key === 'Enter') {
         submitGuess();
     }
-    else if (key === 'del') {
+    else if (key === 'Delete') {
         deleteLetter();
     }
     else {
-        const char = e.target.dataset.key;
-        addLetter(char);
+        addLetter(key);
     }
 }
 
@@ -226,11 +226,17 @@ const secretCodes = [
 ]
 
 function captureKey(e) {
-    if (e.key !== 'Enter') {
+    let key;
+    if (e.type === 'click') {
+        key = e.target.dataset.key;
+        if (e.target.dataset.key === undefined) return
+    }
+    else key = e.key;
+    if (key !== 'Enter') {
         for (let secretCode of secretCodes) {
-            const char = e.key;
+            const char = key;
             const regex = new RegExp('^[a-z]$', 'i');
-            if (char.match(regex)) secretCode.sequence.push(e.key.toLowerCase());
+            if (char.match(regex)) secretCode.sequence.push(key.toLowerCase());
             if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
 
             if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
