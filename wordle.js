@@ -220,35 +220,28 @@ function gameLoop() {
 }
 
 const secretCodes = [
-    {key: 'unicorn', sequence: []},
-    {key: 'ineedhelp', sequence: []},
-    {key: 'waves', sequence: []},
+    {key: 'horns', sequence: [], func: horns},
+    {key: 'ineedhelp', sequence: [], func: ineedhelp},
+    {key: 'waves', sequence: [], func: waves},
 ]
 
 function captureKey(e) {
     for (let secretCode of secretCodes) {
-        secretCode.sequence.push(e.key.toLowerCase());
+        const char = e.key;
+        const regex = new RegExp('^[a-z]$', 'i');
+        if (char.match(regex)) secretCode.sequence.push(e.key.toLowerCase());
+        if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
+
         if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
         if (secretCode.sequence.join('') === secretCode.key) {
-            if (secretCode.key === 'unicorn') {
-                console.log('YOU HORNY?!?');
-                cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
-            }
-            else if (secretCode.key === 'ineedhelp') {
-                ineedhelp();
-            }
-            else if (secretCode.key === 'waves') {
-                const keyboard = document.querySelector('.keyboard');
-                const keys = keyboard.querySelectorAll('.key');
-                keys.forEach(key => {
-                    key.style.backgroundColor = 'transparent';
-                    key.style.backgroundImage = 'url(water.png)';
-                    key.style.backgroundSize = 'cover';
-                });
-                victoryDance(keys);
-            }
+            secretCode.func();
         }
     }
+}
+
+function horns() {
+    console.log('YOU HORNY?!?');
+    cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
 }
 
 function ineedhelp() {
@@ -277,6 +270,17 @@ function ineedhelp() {
     for (let letter of possibleWord) {
         addLetter(letter);
     }
+}
+
+function waves() {
+    const keyboard = document.querySelector('.keyboard');
+    const keys = keyboard.querySelectorAll('.key');
+    keys.forEach(key => {
+        key.style.backgroundColor = 'transparent';
+        key.style.backgroundImage = 'url(water.png)';
+        key.style.backgroundSize = 'cover';
+    });
+    victoryDance(keys);
 }
 
 
