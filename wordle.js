@@ -61,6 +61,14 @@ function addLetter(letter) {
     tile.innerText = letter;
     tile.dataset.letter = letter;
     tile.classList.add('active');
+    animateNewTile(tile);
+}
+
+function animateNewTile(tile) {
+    tile.classList.add('new');
+    tile.addEventListener('animationend', () => {
+        tile.classList.remove('new');
+    })
 }
 
 function deleteLetter() {
@@ -73,6 +81,15 @@ function deleteLetter() {
     lastActive.classList.remove('active');
 }
 
+function shakeTiles(tiles) {
+    tiles.forEach(tile => {
+        tile.classList.add('shake');
+        tile.addEventListener('animationend', () => {
+            tile.classList.remove('shake');
+        });
+    })   
+}
+
 function submitGuess() {
     const guessGrid = document.querySelector('.guess-grid');
     const activeTiles = guessGrid.querySelectorAll('.active');
@@ -80,11 +97,13 @@ function submitGuess() {
     activeTiles.forEach(tile => guess += tile.innerText.toLowerCase());
     if (guess.length !== WORD_LENGTH) {
         makeAlert('Not enough letters');
-        return;
+        const blanks = [...guessGrid.querySelectorAll(':not([data-letter])')];
+        const tilesToShake = [...activeTiles, ...blanks.slice(0, WORD_LENGTH - activeTiles.length)]
+        shakeTiles(tilesToShake);
     }
     else if (!guessWords.includes(guess) && !targetWords.includes(guess)){
         makeAlert('Not in word list');
-        return;
+        shakeTiles(activeTiles);
     }
     else {
         for (let i = 0; i < guess.length; i++) {

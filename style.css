@@ -116,6 +116,9 @@ body {
 
 .tile.active {
     border-color: hsla(var(--clr-white) / 0.55);
+}
+
+.tile.new {
     animation: add-letter 150ms ease-in-out;
 }
 
@@ -128,6 +131,40 @@ body {
     }
     100% {
         transform: scale(1);
+    }
+}
+
+.tile.shake {
+    animation: shake 550ms ease-in-out;
+}
+
+@keyframes shake {
+    10% {
+        transform: translateX(-5%);
+    }
+    20% {
+        transform: translateX(5%);
+    }
+    30% {
+        transform: translateX(-7.5%);
+    }
+    40% {
+        transform: translateX(7.5%);
+    }
+    50% {
+        transform: translateX(-7.5%);
+    }
+    60% {
+        transform: translateX(7.5%);
+    }
+    70% {
+        transform: translateX(-5%);
+    }
+    80% {
+        transform: translateX(5%);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 
