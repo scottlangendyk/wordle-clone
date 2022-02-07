@@ -177,6 +177,10 @@ body {
     animation: dance 500ms ease-in-out;
 }
 
+.key.dance {
+    animation: dance 500ms ease-in-out;
+}
+
 @keyframes dance {
     20% {
         transform: translateY(-50%);

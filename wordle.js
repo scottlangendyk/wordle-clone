@@ -221,7 +221,8 @@ function gameLoop() {
 
 const secretCodes = [
     {key: 'unicorn', sequence: []},
-    {key: 'ineedhelp', sequence: []}
+    {key: 'ineedhelp', sequence: []},
+    {key: 'waves', sequence: []},
 ]
 
 function captureKey(e) {
@@ -234,28 +235,42 @@ function captureKey(e) {
                 cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
             }
             else if (secretCode.key === 'ineedhelp') {
+                ineedhelp();
+            }
+            else if (secretCode.key === 'waves') {
                 const keyboard = document.querySelector('.keyboard');
-                const keys = [...keyboard.querySelectorAll('.key')];
-                const correctKeys = keys.filter(key => key.classList.contains('correct'));
-                const presentKeys = keys.filter(key => key.classList.contains('present'));
-                const absentKeys = keys.filter(key => key.classList.contains('absent'));
-                const possibleWord = targetWords.filter(word => {
-                    for (let key of correctKeys) {
-                        if (word[key.dataset.index] !== key.innerText.toLowerCase()) return false;
-                    }
-                    for (let key of presentKeys) {
-                        const letter = key.innerText.toLowerCase();
-                        if (!word.includes(letter)) return false;
-                    }
-                    for (let key of absentKeys) {
-                        const letter = key.innerText.toLowerCase();
-                        if (word.includes(letter)) return false;
-                    }
-                    return true;
-                })[0];
-                makeAlert(`Try: ${possibleWord}`)
+                const keys = keyboard.querySelectorAll('.key');
+                victoryDance(keys);
             }
         }
+    }
+}
+
+function ineedhelp() {
+    const keyboard = document.querySelector('.keyboard');
+    const keys = [...keyboard.querySelectorAll('.key')];
+    const correctKeys = keys.filter(key => key.classList.contains('correct'));
+    const presentKeys = keys.filter(key => key.classList.contains('present'));
+    const absentKeys = keys.filter(key => key.classList.contains('absent'));
+    const possibleWords = targetWords.filter(word => {
+        for (let key of correctKeys) {
+            if (word[key.dataset.index] !== key.innerText.toLowerCase()) return false;
+        }
+        for (let key of presentKeys) {
+            const letter = key.innerText.toLowerCase();
+            if (!word.includes(letter)) return false;
+        }
+        for (let key of absentKeys) {
+            const letter = key.innerText.toLowerCase();
+            if (word.includes(letter)) return false;
+        }
+        return true;
+    });
+    const possibleWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
+    makeAlert(`Try: ${possibleWord}`);
+    for (let i = 0; i < 5; i++) deleteLetter();
+    for (let letter of possibleWord) {
+        addLetter(letter);
     }
 }
 
