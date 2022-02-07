@@ -106,9 +106,24 @@ function submitGuess() {
         shakeTiles(activeTiles);
     }
     else {
-        for (let i = 0; i < guess.length; i++) {
+        checkGuess(activeTiles, guess)
+    }
+}
+
+function flipTile(tile, index, guess) {
+    setTimeout(() => {
+        tile.classList.add('flip');
+    }, index * 250)
+}
+
+function checkGuess(activeTiles, guess) {
+    for (let i = 0; i < activeTiles.length; i++) {
+        flipTile(activeTiles[i], i, guess);
+        activeTiles[i].addEventListener('transitionend', () => {
+            activeTiles[i].classList.remove('flip');
+
             if (guess[i] === targetWord[i]) {
-                activeTiles[i].classList.add('correct')
+                activeTiles[i].classList.add('correct');
             }
             else if (targetWord.includes(guess[i])) {
                 activeTiles[i].classList.add('present')
@@ -116,8 +131,9 @@ function submitGuess() {
             else {
                 activeTiles[i].classList.add('absent')
             }
+
             activeTiles[i].classList.remove('active')
-        }
+        })
     }
 }
 

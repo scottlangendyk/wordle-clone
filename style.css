@@ -112,6 +112,7 @@ body {
     );
     user-select: none;
     text-transform: uppercase;
+    transition: transform 250ms ease-in-out;
 }
 
 .tile.active {
@@ -166,6 +167,10 @@ body {
     100% {
         transform: translateX(0);
     }
+}
+
+.tile.flip {
+    transform: rotateX(90deg);
 }
 
 .tile.absent {
