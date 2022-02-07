@@ -226,16 +226,18 @@ const secretCodes = [
 ]
 
 function captureKey(e) {
-    for (let secretCode of secretCodes) {
-        const char = e.key;
-        const regex = new RegExp('^[a-z]$', 'i');
-        if (char.match(regex)) secretCode.sequence.push(e.key.toLowerCase());
-        if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
+    if (e.key !== 'Enter') {
+        for (let secretCode of secretCodes) {
+            const char = e.key;
+            const regex = new RegExp('^[a-z]$', 'i');
+            if (char.match(regex)) secretCode.sequence.push(e.key.toLowerCase());
+            if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
 
-        if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
-        
-        if (secretCode.sequence.join('') === secretCode.key) {
-            secretCode.func();
+            if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
+            
+            if (secretCode.sequence.join('') === secretCode.key) {
+                secretCode.func();
+            }
         }
     }
 }
