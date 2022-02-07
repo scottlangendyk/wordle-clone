@@ -240,6 +240,11 @@ function captureKey(e) {
             else if (secretCode.key === 'waves') {
                 const keyboard = document.querySelector('.keyboard');
                 const keys = keyboard.querySelectorAll('.key');
+                keys.forEach(key => {
+                    key.style.backgroundColor = 'transparent';
+                    key.style.backgroundImage = 'url(water.png)';
+                    key.style.backgroundSize = 'cover';
+                });
                 victoryDance(keys);
             }
         }
