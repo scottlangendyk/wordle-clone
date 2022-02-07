@@ -97,12 +97,14 @@ function submitGuess() {
     activeTiles.forEach(tile => guess += tile.innerText.toLowerCase());
     if (guess.length !== WORD_LENGTH) {
         makeAlert('Not enough letters');
+        console.log("Dude that's not even enough letters.")
         const blanks = [...guessGrid.querySelectorAll(':not([data-letter])')];
         const tilesToShake = [...activeTiles, ...blanks.slice(0, WORD_LENGTH - activeTiles.length)]
         shakeTiles(tilesToShake);
     }
     else if (!guessWords.includes(guess) && !targetWords.includes(guess)){
         makeAlert('Not in word list');
+        console.log("You can't just make shit up...")
         shakeTiles(activeTiles);
     }
     else {
@@ -110,15 +112,16 @@ function submitGuess() {
     }
 }
 
-function flipTile(tile, index, guess) {
+function flipTile(tile, index) {
     setTimeout(() => {
         tile.classList.add('flip');
-    }, index * 250)
+    }, index * 250);
 }
 
 function checkGuess(activeTiles, guess) {
+    stopInteraction();
     for (let i = 0; i < activeTiles.length; i++) {
-        flipTile(activeTiles[i], i, guess);
+        flipTile(activeTiles[i], i);
         activeTiles[i].addEventListener('transitionend', () => {
             activeTiles[i].classList.remove('flip');
 
@@ -133,7 +136,27 @@ function checkGuess(activeTiles, guess) {
             }
 
             activeTiles[i].classList.remove('active')
-        })
+            if (i === activeTiles.length - 1) {
+                updateKeyboard(guess);
+                startInteraction();
+            }
+        });
+    }
+}
+
+function updateKeyboard(guess) {
+    const keys = [...document.querySelectorAll('.key')];
+    for (let i = 0; i < guess.length; i++) {
+        const key = keys.find(key => key.dataset.key === guess[i].toUpperCase());
+        if (guess[i] === targetWord[i]) {
+            key.classList.add('correct');
+        }
+        else if (targetWord.includes(guess[i])) {
+            key.classList.add('present');
+        }
+        else {
+            key.classList.add('absent');
+        }
     }
 }
 
