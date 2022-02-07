@@ -7,6 +7,7 @@ const guessWords = [
 ];
 
 const targetWord = 'apple';
+const startDate = new Date()
 startInteraction()
 
 
@@ -90,6 +91,17 @@ function shakeTiles(tiles) {
     })   
 }
 
+function victoryDance(tiles) {
+    tiles.forEach((tile, index) => {
+        setTimeout(() => {
+            tile.classList.add('dance');
+            tile.addEventListener('animationend', () => {
+                tile.classList.remove('dance');
+            });
+        }, index * 500/5)
+    })   
+}
+
 function submitGuess() {
     const guessGrid = document.querySelector('.guess-grid');
     const activeTiles = guessGrid.querySelectorAll('.active');
@@ -122,6 +134,7 @@ function checkGuess(activeTiles, guess) {
     stopInteraction();
     for (let i = 0; i < activeTiles.length; i++) {
         flipTile(activeTiles[i], i);
+        
         activeTiles[i].addEventListener('transitionend', () => {
             activeTiles[i].classList.remove('flip');
 
@@ -137,11 +150,34 @@ function checkGuess(activeTiles, guess) {
 
             activeTiles[i].classList.remove('active')
             if (i === activeTiles.length - 1) {
-                updateKeyboard(guess);
-                startInteraction();
+                activeTiles[i].addEventListener('transitionend', () => {
+                    updateKeyboard(guess);
+                    startInteraction();
+                    const win = checkWin(guess,activeTiles);
+                    if (win) victoryDance(activeTiles);
+                });   
             }
         });
     }
+}
+
+function checkWin(guess, activeTiles) {
+    const guessGrid = document.querySelector('.guess-grid');
+    const totalLetters = guessGrid.querySelectorAll('[data-letter]').length;
+    if (guess === targetWord) {
+        stopInteraction();
+        if (totalLetters <= 5) makeAlert("You think I don't recognize a cheater when I see one??", 3000);
+        else if (totalLetters <= 10) makeAlert("2 guesses?? Highly suspicious but congrats.", 3000);
+        else if (totalLetters <= 15) makeAlert("Incredible!", 3000);
+        else if (totalLetters <= 20) makeAlert("Great!", 3000);
+        else makeAlert("Not bad!", 3000);
+        return true;
+    }
+    else if (guess !== targetWord && totalLetters >= 30) {
+        stopInteraction();
+        makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
+    }
+    return false;
 }
 
 function updateKeyboard(guess) {
