@@ -220,7 +220,7 @@ function gameLoop() {
 }
 
 const secretCodes = [
-    {key: 'horns', sequence: [], func: horns},
+    {key: 'corns', sequence: [], func: corns},
     {key: 'ineedhelp', sequence: [], func: ineedhelp},
     {key: 'waves', sequence: [], func: waves},
 ]
@@ -233,13 +233,14 @@ function captureKey(e) {
         if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
 
         if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
+        
         if (secretCode.sequence.join('') === secretCode.key) {
             secretCode.func();
         }
     }
 }
 
-function horns() {
+function corns() {
     console.log('YOU HORNY?!?');
     cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
 }
