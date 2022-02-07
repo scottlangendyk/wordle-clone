@@ -79,11 +79,11 @@ function submitGuess() {
     let guess = "";
     activeTiles.forEach(tile => guess += tile.innerText.toLowerCase());
     if (guess.length !== WORD_LENGTH) {
-        makeAlert('Not Enough Letters');
+        makeAlert('Not enough letters');
         return;
     }
     else if (!guessWords.includes(guess) && !targetWords.includes(guess)){
-        makeAlert('Not in Word List');
+        makeAlert('Not in word list');
         return;
     }
     else {
@@ -97,6 +97,21 @@ function submitGuess() {
             else {
                 activeTiles[i].classList.add('absent')
             }
+            activeTiles[i].classList.remove('active')
         }
     }
+}
+
+function makeAlert(content, duration = 1000) {
+    const alertContainer = document.querySelector('.alert-container');
+    const newAlert = document.createElement('div');
+    newAlert.classList.add('alert');
+    newAlert.innerText = content;
+    alertContainer.prepend(newAlert);
+    newAlert.addEventListener('transitionend', () => {
+        newAlert.remove();
+    })
+    setTimeout(() => {
+        newAlert.classList.add('hide')
+    }, duration)
 }
