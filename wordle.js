@@ -7,6 +7,7 @@ const guessWords = [
 ];
 
 let targetWord;
+const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
 gameLoop();
 
 function startInteraction() {
@@ -19,6 +20,20 @@ function startInteraction() {
 function stopInteraction() {
     document.removeEventListener('click', handleClick);
     document.removeEventListener('keydown', handleKeyPress);
+}
+
+// load previous letters from local storage:
+function loadGuesses() {
+    
+    let tiles = [...document.querySelectorAll('.tile')]
+    let count = 0;
+    priorGuesses.forEach(guess => {
+        for (let i = 0; i < guess.length; i++) {
+            tiles[count].innerText = guess[i]
+            count++;
+        }
+        checkGuess(tiles.slice(count-5, count), guess)
+    })
 }
 
 function handleKeyPress(e) {
@@ -105,6 +120,8 @@ function submitGuess() {
     const activeTiles = guessGrid.querySelectorAll('.active');
     let guess = "";
     activeTiles.forEach(tile => guess += tile.innerText.toLowerCase());
+    priorGuesses.push(guess);
+    localStorage.setItem('priorGuesses', JSON.stringify(priorGuesses));
     if (guess.length !== WORD_LENGTH) {
         makeAlert('Not enough letters');
         console.log("Dude that's not even enough letters.")
