@@ -2716,6 +2716,11 @@ function waves() {
         key.style.backgroundColor = 'transparent';
         key.style.backgroundImage = 'url(water.png)';
         key.style.backgroundSize = 'cover';
+        // if (key.classList.contains("absent")) key.style.color = 'hsl(240,2%,23%)';
+        // if (key.classList.contains("present")) key.style.color = 'hsl(49,51%,47%)';
+        // if (key.classList.contains("correct")) key.style.color = 'hsl(115,29%,43%)';
+        key.style.fontWeight = 'bold'
+        key.style.fontSize = '1.1rem'
     });
     victoryDance(keys);
 }
