@@ -2663,8 +2663,17 @@ function captureKey(e) {
 
 function corns() {
     console.log('YOU HORNY?!?');
+
     for (let i = 0; i < 35; i++) {
-        setTimeout(cornify_add(), 550)
+        setTimeout(() => {
+            cornify_add();
+            if (i === 34) {
+                setTimeout(() => {
+                    document.querySelectorAll('.__cornify_unicorn').forEach(el => el.remove());
+                    document.querySelector('#__cornify_count').remove()
+                },1500);
+            }
+        }, i*150);
     }
     // cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
 }
