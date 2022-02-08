@@ -45,6 +45,17 @@ body {
     user-select: none;
 }
 
+.stats-btn {
+    padding-right: 0.3rem;
+    background-color: inherit;
+    border: none;
+    fill: hsla(var(--clr-white) / 0.3);
+    cursor: pointer;
+}
+
+.stats-icon-container > i {
+}
+
 .keyboard {
     display: grid;
     grid-template-columns: repeat(20,minmax(auto, 1.25em));
