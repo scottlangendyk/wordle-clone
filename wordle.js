@@ -2322,6 +2322,7 @@ const guessWords = [
 
 let targetWord;
 let gameNumber;
+let reloadPriorGuesses = false;
 const statHolder = {
     // store # of guesses for each game in the gamesPlayed
     gamesPlayed: [],
@@ -2352,12 +2353,14 @@ function gameLoop() {
     targetWord = targetWords[index];
     
     if (!newDay()) {
-        console.log('Loading previous guesses')
+        console.log('Loading previous guesses');
+        reloadPriorGuesses = true;
         loadGuesses();
     }
     else {
         console.log('A brand new day!')
         localStorage.setItem('priorGuesses', JSON.stringify([]));
+        reloadPriorGuesses = false;
     }
     startInteraction();
 }
@@ -2575,7 +2578,7 @@ function checkWin(guess) {
         }
         return true;
     }
-    else if (guess !== targetWord && totalLetters >= 30) {
+    else if (guess !== targetWord && totalLetters >= 30 && !reloadPriorGuesses) {
         stopInteraction();
         makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
         console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
