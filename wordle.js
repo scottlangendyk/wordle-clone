@@ -2329,16 +2329,17 @@ const statHolder = {
     winStreak: 0,
     winStreakRecord: 0,
     nonWordGuesses: 0,
-    secretsFound: 0,
-}
+    secretsFound: [],
+};
+
 const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
 gameLoop();
 
 function newDay() {
     const today = new Date().toLocaleDateString();
-    if (localStorage.lastDate === today) return false;
-    localStorage.lastDate = today;
+    if (JSON.parse(localStorage.getItem('lastDate')) === today) return false;
+    localStorage.setItem('lastDate', JSON.stringify(today));
     return true;
 }
 
@@ -2356,7 +2357,7 @@ function gameLoop() {
     }
     else {
         console.log('A brand new day!')
-        localStorage.setItem('priorGuesses', []);
+        localStorage.setItem('priorGuesses', JSON.stringify([]));
     }
     startInteraction();
 }
@@ -2498,7 +2499,8 @@ function submitGuess() {
         makeAlert('Not in word list');
         console.log("You can't just make shit up...")
         shakeTiles(activeTiles);
-        localStorage.setItem('stats.nonWordGuesses', JSON.stringify(++stats.nonWordGuesses));
+        stats.nonWordGuesses++;
+        localStorage.setItem('stats', JSON.stringify(stats));
     }
     else {
         checkGuess(activeTiles, guess);
@@ -2561,6 +2563,7 @@ function checkWin(guess) {
         if (!stats.gamesPlayed.find(game => game.id === gameNumber)) {
             stats.gamesPlayed.push({
                 id: gameNumber,
+                datePlayed: new Date().toLocaleDateString(),
                 numGuesses: Math.floor(totalLetters / WORD_LENGTH),
                 won: true,
                 word: targetWord,
@@ -2581,6 +2584,7 @@ function checkWin(guess) {
         if (!stats.gamesPlayed.find(game => game.id === gameNumber)) {
             stats.gamesPlayed.push({
                 id: gameNumber,
+                datePlayed: new Date().toLocaleDateString(),
                 numGuesses: Math.floor(totalLetters / WORD_LENGTH),
                 won: false,
                 word: targetWord,
@@ -2648,6 +2652,10 @@ function captureKey(e) {
             
             if (secretCode.sequence.join('') === secretCode.key) {
                 secretCode.func();
+                if (!stats.secretsFound.includes(secretCode.key)) {
+                    stats.secretsFound.push(secretCode.key);
+                    localStorage.setItem('stats', JSON.stringify(stats));
+                }
             }
         }
     }
@@ -2655,7 +2663,10 @@ function captureKey(e) {
 
 function corns() {
     console.log('YOU HORNY?!?');
-    cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
+    for (let i = 0; i < 35; i++) {
+        setTimeout(cornify_add(), 550)
+    }
+    // cornify_add(); // adds a unicorn from inbedded cornify site (see script tag above)
 }
 
 function ineedhelp() {
