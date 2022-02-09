@@ -42,8 +42,6 @@ body {
     font-size: clamp(1rem, 4vmin, 4rem);
     padding: 0 4rem 0 4rem;
     letter-spacing: 0.2rem;
-    pointer-events: none;
-    user-select: none;
     display: block;
     position: absolute;
     left: 0;
@@ -51,6 +49,7 @@ body {
 }
 
 .stats-btn-container {
+    cursor: pointer;
 
 }
 
@@ -58,6 +57,10 @@ body {
     background-color: inherit;
     border: none;
     fill: hsla(var(--clr-white) / 0.3);
+    cursor: pointer;
+}
+
+.stats-btn > svg {
     cursor: pointer;
 }
 
@@ -303,6 +306,7 @@ body {
     justify-content: center;
     align-items: center;
     transition: opacity 0.2s ease-in-out;
+    z-index: 100;
 }
 
 .modal.hide {

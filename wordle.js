@@ -2420,7 +2420,9 @@ function populateStats() {
     })
 
     played.innerText = stats.gamesPlayed.length;
-    win_percent.innerText = Math.round(stats.gamesPlayed.filter(g => g.won).length / stats.gamesPlayed.length * 100);
+    if (stats.gamesPlayed.length > 0) {
+        win_percent.innerText = Math.round(stats.gamesPlayed.filter(g => g.won).length / stats.gamesPlayed.length * 100);
+    }
     streak.innerText = stats.winStreak;
     record.innerText = stats.winStreakRecord;
     non_word_guesses.innerText = stats.nonWordGuesses;
@@ -2463,6 +2465,12 @@ function gameLoop() {
     gameNumber = index;
     targetWord = targetWords[index];
     const timer = setInterval(updateCountdown, 1000);
+
+    const statsCloseBtn = document.querySelector('.modal-exit');
+    const statsBtn = document.querySelector('.stats-btn');
+
+    statsCloseBtn.addEventListener('click', showStats);
+    statsBtn.addEventListener('click', showStats);
     
     if (!newDay()) {
         console.log('Loading previous guesses');
