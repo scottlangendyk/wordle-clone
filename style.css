@@ -293,6 +293,18 @@ body {
 }
 
 .modal {
+    background-color: rgba(0,0,0,0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -300,6 +312,7 @@ body {
     color: hsl(var(--clr-key-text));
     width: 80vw;
     position: relative;
+    background: rgba(0,0,0,1)
 }
 
 .modal-exit {
@@ -313,11 +326,12 @@ body {
 .modal-title {
     display: flex;
     padding-top: 1rem;
-    padding-bottom: 0.6rem;
+    padding-bottom: 0.8rem;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: clamp(0.7rem, 5.2vmin, 1rem);
+    letter-spacing: 0.1rem;
 }
 
 #stats-area {
@@ -336,12 +350,13 @@ body {
 }
 
 .stat {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 5.2vmin, 1.7rem);
     font-weight: bold;
 }
 
 .stat-label {
     padding-top: 0.1rem;
+    font-size: clamp(0.7rem, 2.2vmin, 0.85rem);
 }
 
 #graph {
