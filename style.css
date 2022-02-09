@@ -295,13 +295,14 @@ body {
     flex-direction: column;
     color: hsl(var(--clr-key-text));
     width: 80vw;
+    position: relative;
 }
 
 .modal-exit {
     fill: hsl(var(--clr-key-text));
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0.2rem;
+    right: 0.2rem;
 }
 
 .modal-title {
@@ -391,9 +392,15 @@ body {
     fill: hsl(var(--clr-key-text));
     border: none;
     border-radius: 0.3rem;
-    padding: 0.3rem 0.6rem;
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+#share-btn > svg {
+    margin-left: 0.5rem;
 }
