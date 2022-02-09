@@ -126,16 +126,18 @@ body {
 
 .guess-grid {
     display: grid;
-    grid-template-columns: repeat(5, 3.5em);
-    grid-auto-rows: 3.5em;
+    grid-template-columns: repeat(5, minmax(auto, 4.5rem));
+    /* grid-auto-rows: 4.5rem; */
     gap: 0.25em;
     justify-content: center;
     align-content: center;
     flex-grow: 1;
     padding: 1.5rem;
+    max-width: 80vw;
 }
 
 .tile {
+    aspect-ratio: 1;
     border: 0.1rem solid hsla(var(--clr-white) / 0.3);
     color: hsl(var(--clr-key-text));
     display: flex;
