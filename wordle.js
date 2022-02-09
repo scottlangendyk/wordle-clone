@@ -2332,10 +2332,33 @@ const statHolder = {
     nonWordGuesses: 0,
     secretsFound: [],
 };
+const secretCodes = [
+    {key: 'corns', sequence: [], func: corns},
+    {key: 'ineedhelp', sequence: [], func: ineedhelp},
+    {key: 'waves', sequence: [], func: waves},
+];
 
 const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
 gameLoop();
+populateStats()
+
+function populateStats() {
+    const modal = document.querySelector('.modal');
+    const played = modal.querySelector('#played');
+    const win_percent = modal.querySelector('#win_percent');
+    const streak = modal.querySelector('#streak');
+    const record = modal.querySelector('#record');
+    const non_word_guesses = modal.querySelector('#non-word');
+    const secrets_found = modal.querySelector('#secrets');
+
+    played.innerText = stats.gamesPlayed.length;
+    win_percent.innerText = stats.gamesPlayed.filter(g => g.won).length;
+    streak.innerText = stats.winStreak;
+    record.innerText = stats.winStreakRecord;
+    non_word_guesses.innerText = stats.nonWordGuesses;
+    secrets_found.innerText = `${stats.secretsFound.length} / ${secretCodes.length}`;
+}
 
 function newDay() {
     const today = new Date().toLocaleDateString();
@@ -2630,12 +2653,6 @@ function makeAlert(content, duration = 1000) {
         newAlert.classList.add('hide')
     }, duration)
 }
-
-const secretCodes = [
-    {key: 'corns', sequence: [], func: corns},
-    {key: 'ineedhelp', sequence: [], func: ineedhelp},
-    {key: 'waves', sequence: [], func: waves},
-]
 
 function captureKey(e) {
     let key;

@@ -303,6 +303,7 @@ body {
     position: absolute;
     top: 0.2rem;
     right: 0.2rem;
+    cursor: pointer;
 }
 
 .modal-title {
@@ -392,7 +393,7 @@ body {
     fill: hsl(var(--clr-key-text));
     border: none;
     border-radius: 0.3rem;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
