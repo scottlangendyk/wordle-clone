@@ -2359,7 +2359,6 @@ const secretCodes = [
 const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
 gameLoop();
-populateStats()
 
 function resultsText() {
     const tiles = [...document.querySelectorAll('.tile')];
@@ -2462,7 +2461,9 @@ function gameLoop() {
     const index = Math.floor(daysPast % targetWords.length);
     gameNumber = index;
     targetWord = targetWords[index];
+
     const timer = setInterval(updateCountdown, 1000);
+    populateStats()
 
     const statsCloseBtn = document.querySelector('.modal-exit');
     const statsBtn = document.querySelector('.stats-btn');
@@ -2696,9 +2697,10 @@ function checkWin(guess) {
             stats.winStreakRecord = stats.winStreak > stats.winStreakRecord ? stats.winStreak : stats.winStreakRecord;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
+        showStats();
         return true;
     }
-    else if (guess !== targetWord && totalLetters >= 30 && !reloadPriorGuesses) {
+    else if (guess !== targetWord && totalLetters >= 30) {
         stopInteraction();
         makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
         console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
@@ -2716,6 +2718,7 @@ function checkWin(guess) {
             stats.winStreak = 0;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
+        showStats();
     }
     return false;
 }
@@ -2834,7 +2837,6 @@ function waves() {
         // if (key.classList.contains("present")) key.style.color = 'hsl(49,51%,47%)';
         // if (key.classList.contains("correct")) key.style.color = 'hsl(115,29%,43%)';
         key.style.fontWeight = 'bold'
-        key.style.fontSize = '1.1rem'
     });
     victoryDance(keys);
 }

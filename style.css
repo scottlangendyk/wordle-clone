@@ -388,17 +388,17 @@ body {
 }
 
 .bar-label {
-    padding-right: 0.4rem;
+    padding: 0.1rem 0.4rem 0.1rem 0;
 }
 
 .bar-bar {
     display: flex;
     align-items: center;
     background-color: hsla(var(--clr-white) / 0.3);
-    padding: 0rem 0.4rem;
+    padding: 0.1rem 0.4rem;
     justify-content: flex-end;
     font-weight: bold;
-    font-size: 1rem;
+    /* font-size: 1rem; */
 }
 
 .bar-bar.current {
