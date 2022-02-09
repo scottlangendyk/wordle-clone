@@ -2421,6 +2421,7 @@ function gameLoop() {
     else {
         console.log('A brand new day!')
         reloadPriorGuesses = false;
+        localStorage.removeItem('priorGuesses');
     }
     startInteraction();
 }
