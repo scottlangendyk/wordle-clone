@@ -2375,7 +2375,7 @@ function resultsText() {
         else return dark;
     })
     
-    let result = `Schmurdle ${gameNumber} ${tiles.filter(t => t.dataset.letter).length / 5}/6\n\n`
+    let result = `Shmurdle ${gameNumber} ${tiles.filter(t => t.dataset.letter).length / 5}/6\n\n`
     for (let i = 0; i < 6; i++) {
         result += grid.slice(i*5, i*5+5).join('') + "\n";
     }
@@ -2427,6 +2427,21 @@ function populateStats() {
     secrets_found.innerText = `${stats.secretsFound.length} / ${secretCodes.length}`;
 }
 
+function updateCountdown() {
+    const countdown = document.querySelector('#countdown');
+    const now = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(now.getDate() + 1);
+    tomorrow.setHours(0,0,0,0);
+
+    const difference = tomorrow - now;
+    const seconds = Math.floor((difference / 1000) % 60);
+    const minutes = Math.floor((difference / 1000 / 60) % 60);
+    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+
+    countdown.innerText = `${hours<10 ? 0 : ""}${hours}:${minutes<10 ? 0 : ""}${minutes}:${seconds<10 ? 0 : ""}${seconds}`;
+}
+
 function newDay() {
     const today = new Date().toLocaleDateString();
     if (JSON.parse(localStorage.getItem('lastDate')) === today) return false;
@@ -2442,6 +2457,7 @@ function gameLoop() {
     const index = Math.floor(daysPast % targetWords.length);
     gameNumber = index;
     targetWord = targetWords[index];
+    const timer = setInterval(updateCountdown, 1000);
     
     if (!newDay()) {
         console.log('Loading previous guesses');
