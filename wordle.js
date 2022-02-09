@@ -2326,29 +2326,29 @@ let reloadPriorGuesses = false;
 const statHolder = {
     // store # of guesses for each game in the gamesPlayed
     gamesPlayed: [
-        {id: gameNumber,
-        datePlayed: new Date().toLocaleDateString(),
-        numGuesses: 3,
-        won: true,
-        word: targetWord,},
+        // {id: gameNumber,
+        // datePlayed: new Date().toLocaleDateString(),
+        // numGuesses: 3,
+        // won: true,
+        // word: targetWord,},
 
-        {id: gameNumber,
-            datePlayed: new Date().toLocaleDateString(),
-            numGuesses: 5,
-            won: false,
-            word: targetWord,},
+        // {id: gameNumber,
+        //     datePlayed: new Date().toLocaleDateString(),
+        //     numGuesses: 5,
+        //     won: false,
+        //     word: targetWord,},
 
-        {id: gameNumber,
-            datePlayed: new Date().toLocaleDateString(),
-            numGuesses: 3,
-            won: true,
-            word: targetWord,},
+        // {id: gameNumber,
+        //     datePlayed: new Date().toLocaleDateString(),
+        //     numGuesses: 3,
+        //     won: true,
+        //     word: targetWord,},
     ],
     lastPlayed: "",
-    winStreak: 5,
-    winStreakRecord: 9,
-    nonWordGuesses: 2,
-    secretsFound: ['count'],
+    winStreak: 0,
+    winStreakRecord: 0,
+    nonWordGuesses: 0,
+    secretsFound: [],
 };
 const secretCodes = [
     {key: 'corns', sequence: [], func: corns},
@@ -2381,7 +2381,7 @@ function populateStats() {
         bar.innerText = matchedGuessCount;
         if (matchedGuessCount > highestBar) highestBar = matchedGuessCount;
         // turn the bar with the num guesses from the last game green:
-        if (lastGame.won && lastGame.numGuesses === +bar.dataset.count) {
+        if (lastGame && lastGame.won && lastGame.numGuesses === +bar.dataset.count) {
             bar.classList.add('current')
         }
         if (matchedGuessCount > 0) {
@@ -2401,6 +2401,7 @@ function newDay() {
     const today = new Date().toLocaleDateString();
     if (JSON.parse(localStorage.getItem('lastDate')) === today) return false;
     localStorage.setItem('lastDate', JSON.stringify(today));
+    localStorage.removeItem('priorGuesses');
     return true;
 }
 
@@ -2419,7 +2420,6 @@ function gameLoop() {
     }
     else {
         console.log('A brand new day!')
-        localStorage.setItem('priorGuesses', JSON.stringify([]));
         reloadPriorGuesses = false;
     }
     startInteraction();
