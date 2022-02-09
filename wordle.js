@@ -2450,6 +2450,11 @@ function newDay() {
     return true;
 }
 
+function showStats() {
+    const modal = document.querySelector('.modal');
+    modal.classList.toggle('hide');
+}
+
 function gameLoop() {
     const startDate = new Date(1991, 0, 25);
     const now = Date.now();

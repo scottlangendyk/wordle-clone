@@ -302,6 +302,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.modal.hide {
+    opacity: 0;
 }
 
 .modal-container {
