@@ -2325,12 +2325,30 @@ let gameNumber;
 let reloadPriorGuesses = false;
 const statHolder = {
     // store # of guesses for each game in the gamesPlayed
-    gamesPlayed: [],
+    gamesPlayed: [
+        {id: gameNumber,
+        datePlayed: new Date().toLocaleDateString(),
+        numGuesses: 3,
+        won: true,
+        word: targetWord,},
+
+        {id: gameNumber,
+            datePlayed: new Date().toLocaleDateString(),
+            numGuesses: 5,
+            won: false,
+            word: targetWord,},
+
+        {id: gameNumber,
+            datePlayed: new Date().toLocaleDateString(),
+            numGuesses: 3,
+            won: true,
+            word: targetWord,},
+    ],
     lastPlayed: "",
-    winStreak: 0,
-    winStreakRecord: 0,
-    nonWordGuesses: 0,
-    secretsFound: [],
+    winStreak: 5,
+    winStreakRecord: 9,
+    nonWordGuesses: 2,
+    secretsFound: ['count'],
 };
 const secretCodes = [
     {key: 'corns', sequence: [], func: corns},
@@ -2352,8 +2370,27 @@ function populateStats() {
     const non_word_guesses = modal.querySelector('#non-word');
     const secrets_found = modal.querySelector('#secrets');
 
+    const bars = modal.querySelectorAll('.bar-bar');
+    const lastGame = stats.gamesPlayed[stats.gamesPlayed.length - 1];
+    let highestBar = 0.0001;
+    bars.forEach(bar => {
+        // set bar number to total num of games with that many guesses:
+        const matchedGuessCount = stats.gamesPlayed.filter(g => {
+            return g.numGuesses === +bar.dataset.count;
+        }).length;
+        bar.innerText = matchedGuessCount;
+        if (matchedGuessCount > highestBar) highestBar = matchedGuessCount;
+        // turn the bar with the num guesses from the last game green:
+        if (lastGame.won && lastGame.numGuesses === +bar.dataset.count) {
+            bar.classList.add('current')
+        }
+        if (matchedGuessCount > 0) {
+            bar.style.width = `${matchedGuessCount / highestBar * 100}%`;
+        }
+    })
+
     played.innerText = stats.gamesPlayed.length;
-    win_percent.innerText = stats.gamesPlayed.filter(g => g.won).length;
+    win_percent.innerText = Math.round(stats.gamesPlayed.filter(g => g.won).length / stats.gamesPlayed.length * 100);
     streak.innerText = stats.winStreak;
     record.innerText = stats.winStreakRecord;
     non_word_guesses.innerText = stats.nonWordGuesses;
