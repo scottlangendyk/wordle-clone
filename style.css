@@ -58,9 +58,11 @@ body {
     border: none;
     fill: hsla(var(--clr-white) / 0.3);
     cursor: pointer;
+    z-index: 1;
 }
 
 .stats-btn > svg {
+    pointer-events: none;
     cursor: pointer;
 }
 
@@ -311,6 +313,7 @@ body {
 
 .modal.hide {
     opacity: 0;
+    pointer-events: none;
 }
 
 .modal-container {
