@@ -18,7 +18,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    min-height: 95vh;
     max-height: 100vh;
     padding: 0;
     font-size: clamp(.5rem, 2.5vmin, 1.5rem);
@@ -33,6 +33,8 @@ body {
     border-bottom: 1px solid hsla(var(--clr-white) / 0.3);
     width: clamp(25vw, 50vw, 75vw);
     text-align: center;
+    width: 80vw;
+    max-width: 400px; 
 }
 
 .title {
@@ -73,6 +75,7 @@ body {
     gap: 0.25em;
     justify-content: center;
     padding-bottom: 2rem;
+    font-size: clamp(.5rem, 2.8vmin, 1.2rem);
 }
 
 .key {
@@ -131,8 +134,8 @@ body {
 
 .guess-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(auto, 4.5rem));
-    /* grid-auto-rows: 4.5rem; */
+    grid-template-columns: repeat(5, minmax(3.5rem, 3.5vw));
+    grid-auto-rows: minmax(3.5rem, 3.5vw);
     gap: 0.25em;
     justify-content: center;
     align-content: center;
@@ -142,7 +145,6 @@ body {
 }
 
 .tile {
-    aspect-ratio: 1;
     border: 0.1rem solid hsla(var(--clr-white) / 0.3);
     color: hsl(var(--clr-key-text));
     display: flex;
@@ -322,16 +324,18 @@ body {
     align-items: center;
     flex-direction: column;
     color: hsl(var(--clr-key-text));
-    width: 80vw;
+    max-width: 80vw;
     position: relative;
-    background: rgba(0,0,0,1)
+    background: hsl(var(--clr-dark));
+    border-radius: 0.5rem;
+    padding: 1rem;
 }
 
 .modal-exit {
     fill: hsl(var(--clr-key-text));
     position: absolute;
-    top: 0.2rem;
-    right: 0.2rem;
+    top: 0.6rem;
+    right: 0.6rem;
     cursor: pointer;
 }
 
