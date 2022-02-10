@@ -2356,6 +2356,7 @@ const secretCodes = [
     {key: 'waves', sequence: [], func: waves},
     {key: 'break', sequence: [], func: breakScreen},
     {key: 'space', sequence: [], func: space},
+    {key: 'davis', sequence: [], func: davis},
 ];
 
 const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2457,6 +2458,11 @@ function showStats() {
     modal.classList.toggle('hide');
 }
 
+function closeSecretModal() {
+    const modal = document.querySelector('#crack-modal');
+    modal.classList.toggle('hide');
+}
+
 function gameLoop() {
     const startDate = new Date(1991, 0, 25);
     const now = Date.now();
@@ -2468,11 +2474,13 @@ function gameLoop() {
     const timer = setInterval(updateCountdown, 1000);
     populateStats()
 
-    const statsCloseBtn = document.querySelector('.modal-exit');
+    const statsCloseBtn = document.querySelector('#stats-close-btn');
+    const secretModalCloseBtn = document.querySelector('#secret-modal-close-btn')
     const statsBtn = document.querySelector('.stats-btn');
     const shareBtn = document.querySelector('#share-btn');
 
     statsCloseBtn.addEventListener('click', showStats);
+    secretModalCloseBtn.addEventListener('click', closeSecretModal);
     statsBtn.addEventListener('click', showStats);
     shareBtn.addEventListener('click', copyToClipboard);
     
@@ -2865,8 +2873,24 @@ function space() {
     const astronaut = document.createElement('img');
     astronaut.classList.add('astro');
     astronaut.setAttribute('src', 'astronaut.png');
-    astronaut.setAttribute('src', 'astronaut.png');
     document.body.appendChild(astronaut);
+
+    const secretDiv = document.querySelector('.secret-div');
+    secretDiv.innerHTML = 'You may find <a href="http://project-red-rover.herokuapp.com">PROJECT RED ROVER</a> interesting...'
+}
+
+function davis() {
+    const modal = document.querySelector('#crack-modal');
+    modal.classList.toggle('hide');
+
+    const wanted = document.createElement('img');
+    wanted.classList.add('wanted');
+    wanted.setAttribute('src', 'davis.png');
+    modal.appendChild(wanted);
+
+    // setTimeout(() => {
+    //     modal.removeChild(wanted);
+    // }, 2500);
 }
 
 
