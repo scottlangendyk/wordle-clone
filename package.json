@@ -2,7 +2,7 @@
   "name": "shmurdle",
   "version": "1.0.0",
   "description": "wordle clone",
-  "main": "wordle.js",
+  "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
