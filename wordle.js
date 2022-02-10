@@ -2354,7 +2354,7 @@ const secretCodes = [
     {key: 'corns', sequence: [], func: corns},
     {key: 'ineedhelp', sequence: [], func: ineedhelp},
     {key: 'waves', sequence: [], func: waves},
-    {key: 'break', sequence: [], func: breakScreen},
+    {key: 'crack', sequence: [], func: breakScreen},
     {key: 'space', sequence: [], func: space},
     {key: 'davis', sequence: [], func: davis},
 ];

@@ -1,0 +1,23 @@
+{
+  "name": "shmurdle",
+  "version": "1.0.0",
+  "description": "wordle clone",
+  "main": "wordle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoufaSupreme/wordle-clone.git"
+  },
+  "keywords": [
+    "wordle",
+    "shmurdle"
+  ],
+  "author": "Davis Innovations Inc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LoufaSupreme/wordle-clone/issues"
+  },
+  "homepage": "https://github.com/LoufaSupreme/wordle-clone#readme"
+}
