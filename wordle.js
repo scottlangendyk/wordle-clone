@@ -2627,9 +2627,9 @@ function submitGuess() {
         localStorage.setItem('stats', JSON.stringify(stats));
     }
     else {
-        checkGuess(activeTiles, guess);
         priorGuesses.push(guess);
         localStorage.setItem('priorGuesses', JSON.stringify(priorGuesses));    
+        checkGuess(activeTiles, guess);
     }
 }
 
@@ -2697,13 +2697,16 @@ function checkWin(guess) {
             stats.winStreakRecord = stats.winStreak > stats.winStreakRecord ? stats.winStreak : stats.winStreakRecord;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
-        showStats();
+        populateStats();
+        setTimeout(showStats, 1500)
         return true;
     }
     else if (guess !== targetWord && totalLetters >= 30) {
         stopInteraction();
-        makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
-        console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
+        if (guess === priorGuesses[priorGuesses.length - 1]) {
+            makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
+            console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
+        }
 
         // update localStorage:
         if (!stats.gamesPlayed.find(game => game.id === gameNumber)) {
@@ -2718,7 +2721,8 @@ function checkWin(guess) {
             stats.winStreak = 0;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
-        showStats();
+        populateStats();
+        setTimeout(showStats, 1500)
     }
     return false;
 }
