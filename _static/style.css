@@ -78,6 +78,7 @@ body {
     justify-content: center;
     padding-bottom: 2rem;
     font-size: clamp(.5rem, 2.8vmin, 1.2rem);
+    flex: 1;
 }
 
 .key {
@@ -141,7 +142,7 @@ body {
     gap: 0.25em;
     justify-content: center;
     align-content: center;
-    flex-grow: 1;
+    flex: 1;
     padding: 1.5rem;
     max-width: 80vw;
 }
