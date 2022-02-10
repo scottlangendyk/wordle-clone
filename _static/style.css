@@ -523,7 +523,7 @@ footer > a {
     position: fixed;
     top: 7.5%;
     color: hsla(var(--clr-white) / 0.5);
-    font-size: clamp(0.5rem, 1.2vmin, 1rem);
+    font-size: clamp(0.7rem, 1.2vmin, 1rem);
     font-weight: bold;
 }
 

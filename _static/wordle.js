@@ -2893,13 +2893,19 @@ function breakScreen() {
 function space() {
     const body = document.querySelector('body');
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    if (vw < 400) body.style.backgroundImage = 'url("space-mobile.jpg")';
+    if (vw < 400) {
+        body.style.backgroundImage = 'url("space-mobile.jpg")';
+        body.style.backgroundPosition = 'bottom center';
+    }
     else body.style.backgroundImage = 'url("space-desktop.jpg")';
 
     const astronaut = document.createElement('img');
     astronaut.classList.add('astro');
     astronaut.setAttribute('src', 'astronaut.png');
     document.body.appendChild(astronaut);
+    astronaut.addEventListener('animationend', () => {
+        document.body.removeChild(astronaut);
+    });
 
     const secretDiv = document.querySelector('.secret-div');
     secretDiv.innerHTML = 'You may find <a href="http://project-red-rover.herokuapp.com">PROJECT RED ROVER</a> interesting...'
