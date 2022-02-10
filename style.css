@@ -27,16 +27,15 @@ body {
 }
 
 .header {
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
     display:flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid hsla(var(--clr-white) / 0.3);
-    width: clamp(25vw, 50vw, 75vw);
     text-align: center;
     width: 80vw;
-    max-width: 400px; 
+    max-width: 600px; 
 }
 
 .title {
@@ -479,4 +478,21 @@ footer > a {
     position: fixed;
     bottom: 1%;
     transform: rotateZ(70deg);
+}
+
+/* astronaut image */
+.astro {
+    position: fixed;
+    z-index: 100;
+    top: 5%;
+    left: 2%;
+    animation: float 100s linear;
+    animation-iteration-count: 1;
+    height: 20vh;
+}
+
+@keyframes float {
+    100% {
+        transform: translate(100vw, 100vh) rotateZ(-360deg);
+    }
 }

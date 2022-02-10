@@ -2861,6 +2861,12 @@ function space() {
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     if (vw < 400) body.style.backgroundImage = 'url("space-mobile.jpg")';
     else body.style.backgroundImage = 'url("space-desktop.jpg")';
+
+    const astronaut = document.createElement('img');
+    astronaut.classList.add('astro');
+    astronaut.setAttribute('src', 'astronaut.png');
+    astronaut.setAttribute('src', 'astronaut.png');
+    document.body.appendChild(astronaut);
 }
 
 
