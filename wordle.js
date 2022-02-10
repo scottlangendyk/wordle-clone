@@ -2386,6 +2386,7 @@ function copyToClipboard() {
     dummy.select();
     document.execCommand("copy");
     document.body.removeChild(dummy);
+    makeAlert('Copied to Clipboard!')
 }
 
 function populateStats() {
@@ -2775,11 +2776,13 @@ function captureKey(e) {
             if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
             
             if (secretCode.sequence.join('') === secretCode.key) {
+                makeAlert('Secret Found!');
                 secretCode.func();
                 if (!stats.secretsFound.includes(secretCode.key)) {
                     stats.secretsFound.push(secretCode.key);
                     localStorage.setItem('stats', JSON.stringify(stats));
                 }
+                populateStats();
             }
         }
     }
