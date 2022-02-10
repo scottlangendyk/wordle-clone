@@ -2493,6 +2493,7 @@ function gameLoop() {
     targetWord = targetWords[index];
 
     // resets body vertical height on resize
+    setBodyHeight();
     window.addEventListener('resize', setBodyHeight);
 
     const timer = setInterval(updateCountdown, 1000);
