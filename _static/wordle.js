@@ -2477,6 +2477,13 @@ function closeSecretModal() {
     modal.classList.toggle('hide');
 }
 
+// reset body vertical height
+// necessary for proper background sizing on mobile
+function setBodyHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
 function gameLoop() {
     const startDate = new Date(1991, 0, 25);
     const now = Date.now();
@@ -2484,6 +2491,9 @@ function gameLoop() {
     const index = Math.floor(daysPast % targetWords.length);
     gameNumber = index;
     targetWord = targetWords[index];
+
+    // resets body vertical height on resize
+    window.addEventListener('resize', setBodyHeight);
 
     const timer = setInterval(updateCountdown, 1000);
     populateStats()
