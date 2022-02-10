@@ -2355,6 +2355,7 @@ const secretCodes = [
     {key: 'ineedhelp', sequence: [], func: ineedhelp},
     {key: 'waves', sequence: [], func: waves},
     {key: 'break', sequence: [], func: breakScreen},
+    {key: 'space', sequence: [], func: space},
 ];
 
 const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2853,6 +2854,13 @@ function waves() {
 function breakScreen() {
     const modal = document.querySelector('#crack-modal');
     modal.classList.toggle('hide');
+}
+
+function space() {
+    const body = document.querySelector('body');
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (vw < 400) body.style.backgroundImage = 'url("space-mobile.jpg")';
+    else body.style.backgroundImage = 'url("space-desktop.jpg")';
 }
 
 

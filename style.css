@@ -14,6 +14,8 @@
 
 body {
     background-color: hsl(var(--clr-dark));
+    background-size: cover;
+    background-repeat: no-repeat;
     color: hsl(var(--clr-dark));
     display: flex;
     flex-direction: column;
