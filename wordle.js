@@ -2354,6 +2354,7 @@ const secretCodes = [
     {key: 'corns', sequence: [], func: corns},
     {key: 'ineedhelp', sequence: [], func: ineedhelp},
     {key: 'waves', sequence: [], func: waves},
+    {key: 'break', sequence: [], func: breakScreen},
 ];
 
 const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2390,7 +2391,7 @@ function copyToClipboard() {
 }
 
 function populateStats() {
-    const modal = document.querySelector('.modal');
+    const modal = document.querySelector('#stats-modal');
     const played = modal.querySelector('#played');
     const win_percent = modal.querySelector('#win_percent');
     const streak = modal.querySelector('#streak');
@@ -2451,7 +2452,7 @@ function newDay() {
 }
 
 function showStats() {
-    const modal = document.querySelector('.modal');
+    const modal = document.querySelector('#stats-modal');
     modal.classList.toggle('hide');
 }
 
@@ -2704,10 +2705,6 @@ function checkWin(guess) {
     }
     else if (guess !== targetWord && totalLetters >= 30) {
         stopInteraction();
-        if (guess === priorGuesses[priorGuesses.length - 1]) {
-            makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
-            console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
-        }
 
         // update localStorage:
         if (!stats.gamesPlayed.find(game => game.id === gameNumber)) {
@@ -2722,8 +2719,13 @@ function checkWin(guess) {
             stats.winStreak = 0;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
-        populateStats();
-        setTimeout(showStats, 1500)
+
+        if (guess === priorGuesses[priorGuesses.length - 1]) {
+            makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
+            console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
+            populateStats();
+            setTimeout(showStats, 1500)    
+        }
     }
     return false;
 }
@@ -2846,6 +2848,11 @@ function waves() {
         key.style.fontWeight = 'bold'
     });
     victoryDance(keys);
+}
+
+function breakScreen() {
+    const modal = document.querySelector('#crack-modal');
+    modal.classList.toggle('hide');
 }
 
 
