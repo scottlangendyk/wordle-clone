@@ -2473,6 +2473,7 @@ function showStats() {
 
 function closeSecretModal() {
     const modal = document.querySelector('#crack-modal');
+    modal.querySelectorAll('img').forEach(img => modal.removeChild(img));
     modal.classList.toggle('hide');
 }
 
@@ -2874,6 +2875,18 @@ function waves() {
 
 function breakScreen() {
     const modal = document.querySelector('#crack-modal');
+    
+    const crack1 = document.createElement('img');
+    crack1.setAttribute('src', 'crack.png');
+    crack1.id = 'crack1'
+    
+    const crack2 = document.createElement('img');
+    crack2.setAttribute('src', 'crack2.png');
+    crack2.id = 'crack2';
+
+    modal.appendChild(crack1);
+    modal.appendChild(crack2);
+
     modal.classList.toggle('hide');
 }
 
@@ -2899,6 +2912,7 @@ function davis() {
     const wanted = document.createElement('img');
     wanted.classList.add('wanted');
     wanted.setAttribute('src', 'davis.png');
+    wanted.addEventListener('click', closeSecretModal);
     modal.appendChild(wanted);
 
     // setTimeout(() => {
