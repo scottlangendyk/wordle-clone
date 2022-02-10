@@ -2383,13 +2383,26 @@ function resultsText() {
 }
 
 function copyToClipboard() {
-    const dummy = document.createElement("textarea");
-    document.body.appendChild(dummy);
-    dummy.value = resultsText();
-    dummy.select();
-    document.execCommand("copy");
-    document.body.removeChild(dummy);
-    makeAlert('Copied to Clipboard!')
+
+    if (navigator.share) {
+        navigator.share({
+          title: `Shmurdle ${gameNumber}`,
+          text: resultsText()
+        }).then(() => {
+          console.log('Thanks for sharing!');
+        })
+        .catch(console.error);
+      } 
+      else {
+        const dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = resultsText();
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+        makeAlert('Copied to Clipboard!')
+      }
+    
 }
 
 function populateStats() {
