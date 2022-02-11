@@ -2468,6 +2468,7 @@ function updateCountdown() {
     countdown.innerText = `${hours<10 ? 0 : ""}${hours}:${minutes<10 ? 0 : ""}${minutes}:${seconds<10 ? 0 : ""}${seconds}`;
 }
 
+// check if today is a different day than the lastDate stored in local storage
 function newDay() {
     const today = new Date().toLocaleDateString();
     if (JSON.parse(localStorage.getItem('lastDate')) === today) return false;
@@ -2481,6 +2482,7 @@ function showStats() {
     modal.classList.toggle('hide');
 }
 
+// modal used to display secret content
 function closeSecretModal() {
     const modal = document.querySelector('#crack-modal');
     modal.querySelectorAll('img').forEach(img => modal.removeChild(img));
@@ -2494,7 +2496,9 @@ function setBodyHeight() {
     document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
 
+// main game loop
 function gameLoop() {
+    // arbitrary date by which to choose an index from the word array
     const startDate = new Date(1991, 0, 25);
     const now = Date.now();
     const daysPast = (now - startDate) / 1000 / 60 / 60 / 24;
@@ -2514,11 +2518,13 @@ function gameLoop() {
     const statsBtn = document.querySelector('.stats-btn');
     const shareBtn = document.querySelector('#share-btn');
 
+    // initalize modal btn event listeners
     statsCloseBtn.addEventListener('click', showStats);
     secretModalCloseBtn.addEventListener('click', closeSecretModal);
     statsBtn.addEventListener('click', showStats);
     shareBtn.addEventListener('click', copyToClipboard);
     
+    // if it't not a new day, load the prior guesses in local storage
     if (!newDay()) {
         console.log('Loading previous guesses');
         reloadPriorGuesses = true;
@@ -2532,6 +2538,7 @@ function gameLoop() {
     startInteraction();
 }
 
+// allow user to add letters and submit guesses
 function startInteraction() {
     document.addEventListener('click', handleClick);
     document.addEventListener('click', captureKey);
@@ -2539,12 +2546,14 @@ function startInteraction() {
     document.addEventListener('keydown', captureKey);
 }
 
+// stop user from adding letters or submitting guesses
 function stopInteraction() {
     document.removeEventListener('click', handleClick);
     document.removeEventListener('keydown', handleKeyPress);
 }
 
 // Fisher-Yates shuffle:
+// not in use, just used to initially shuffle the words array
 function shuffle(array) {
     let currentIndex = array.length,  randomIndex;
     // While there remain elements to shuffle...
@@ -2573,6 +2582,7 @@ function loadGuesses() {
     })
 }
 
+// used to capture key sequences for the secret codes:
 function handleKeyPress(e) {
     if (e.key === 'Enter') {
         submitGuess();
@@ -2632,6 +2642,7 @@ function deleteLetter() {
     lastActive.classList.remove('active');
 }
 
+// for guesses that are not a word or wrong number of letters
 function shakeTiles(tiles) {
     tiles.forEach(tile => {
         tile.classList.add('shake');
@@ -2641,6 +2652,7 @@ function shakeTiles(tiles) {
     })   
 }
 
+// bouncing animation for win:
 function victoryDance(tiles) {
     tiles.forEach((tile, index) => {
         setTimeout(() => {
