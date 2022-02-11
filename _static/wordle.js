@@ -2384,16 +2384,19 @@ function resultsText() {
 
 function copyToClipboard() {
 
-    if (navigator.share) {
+    // if navigator.share API is supported and user device IS NOT mobile device:
+    // use navigator.share: this will open up the mobile share options 
+    if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
         navigator.share({
-          title: `Shmurdle ${gameNumber}`,
-          text: resultsText()
+            title: `Shmurdle ${gameNumber}`,
+            text: resultsText()
         }).then(() => {
-          console.log('Thanks for sharing!');
+            console.log('Thanks for sharing!');
         })
         .catch(console.error);
-      } 
-      else {
+    }
+    // otherwise just copy to clipboard:
+    else {
         const dummy = document.createElement("textarea");
         document.body.appendChild(dummy);
         dummy.value = resultsText();
@@ -2401,8 +2404,7 @@ function copyToClipboard() {
         document.execCommand("copy");
         document.body.removeChild(dummy);
         makeAlert('Copied to Clipboard!')
-      }
-    
+    }
 }
 
 function populateStats() {
@@ -2423,11 +2425,19 @@ function populateStats() {
             return g.numGuesses === +bar.dataset.count;
         }).length;
         bar.innerText = matchedGuessCount;
+        bar.classList.remove('current');
         if (matchedGuessCount > highestBar) highestBar = matchedGuessCount;
         // turn the bar with the num guesses from the last game green:
         if (lastGame && lastGame.won && lastGame.numGuesses === +bar.dataset.count) {
             bar.classList.add('current')
         }
+    })
+    // set the length of the bar based on how many guesses:
+    bars.forEach(bar => {
+        const matchedGuessCount = stats.gamesPlayed.filter(g => {
+            return g.numGuesses === +bar.dataset.count;
+        }).length;
+        
         if (matchedGuessCount > 0) {
             bar.style.width = `${matchedGuessCount / highestBar * 100}%`;
         }
