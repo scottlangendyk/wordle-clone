@@ -2683,6 +2683,7 @@ function submitGuess() {
         shakeTiles(activeTiles);
         stats.nonWordGuesses++;
         localStorage.setItem('stats', JSON.stringify(stats));
+        populateStats();
     }
     else {
         priorGuesses.push(guess);

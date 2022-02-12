@@ -90,7 +90,7 @@ body {
 @media only screen and (max-width: 600px) {
     .keyboard {
         gap: 0.5em;
-        grid-auto-rows: 3.5rem;
+        grid-auto-rows: 3.8rem;
         padding-inline: 0.3rem;
     }
 }
