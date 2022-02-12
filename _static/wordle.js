@@ -3112,4 +3112,18 @@ function flips() {
     document.body.style.transform = 'rotateY(180deg)';
 }
 
+function chaos() {
+    const keys = document.querySelectorAll('.key');
+    const spacers = document.querySelectorAll('.spacer');
+    const title = document.querySelector('.title');
+    title.style.animation = 'multicolor 5000ms infinite alternate';
+    spacers.forEach(spacer => spacer.remove());
+    keys.forEach(key => {
+        rand = Math.floor(Math.random() * keys.length-1);
+        key.style.order = rand;
+        rand = Math.floor(Math.random() * (6000 - 3000) + 3000);
+        key.style.animation = `multicolor-bg ${rand}ms infinite alternate`;
+    });
+}
+
 
