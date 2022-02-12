@@ -2359,7 +2359,7 @@ const secretCodes = [
     {key: 'davis', sequence: [], func: davis},
 ];
 
-const priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
+let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
 gameLoop();
 
@@ -2379,7 +2379,7 @@ function resultsText() {
     for (let i = 0; i < 6; i++) {
         result += grid.slice(i*5, i*5+5).join('') + "\n";
     }
-    return result;
+    return result.trim();
 }
 
 function copyToClipboard() {
@@ -2473,7 +2473,8 @@ function newDay() {
     const today = new Date().toLocaleDateString();
     if (JSON.parse(localStorage.getItem('lastDate')) === today) return false;
     localStorage.setItem('lastDate', JSON.stringify(today));
-    localStorage.removeItem('priorGuesses');
+    priorGuesses = []
+    localStorage.setItem('priorGuesses', JSON.stringify(priorGuesses));    
     return true;
 }
 
@@ -2533,7 +2534,6 @@ function gameLoop() {
     else {
         console.log('A brand new day!')
         reloadPriorGuesses = false;
-        localStorage.removeItem('priorGuesses');
     }
     startInteraction();
 }
