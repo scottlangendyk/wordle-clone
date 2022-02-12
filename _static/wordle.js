@@ -2331,18 +2331,6 @@ const statHolder = {
         // numGuesses: 3,
         // won: true,
         // word: targetWord,},
-
-        // {id: gameNumber,
-        //     datePlayed: new Date().toLocaleDateString(),
-        //     numGuesses: 5,
-        //     won: false,
-        //     word: targetWord,},
-
-        // {id: gameNumber,
-        //     datePlayed: new Date().toLocaleDateString(),
-        //     numGuesses: 3,
-        //     won: true,
-        //     word: targetWord,},
     ],
     lastPlayed: "",
     winStreak: 0,
@@ -2350,11 +2338,12 @@ const statHolder = {
     nonWordGuesses: 0,
     secretsFound: [],
 };
+
 const secretCodes = [
     {key: 'corns', sequence: [], func: corns},
     {key: 'ineedhelp', sequence: [], func: ineedhelp},
     {key: 'waves', sequence: [], func: waves},
-    {key: 'crack', sequence: [], func: breakScreen},
+    {key: 'crack', sequence: [], func: crack},
     {key: 'space', sequence: [], func: space},
     {key: 'davis', sequence: [], func: davis},
     {key: 'snowy', sequence: [], func: snowy},
@@ -2362,8 +2351,24 @@ const secretCodes = [
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
+let dailySecretWords = JSON.parse(localStorage.getItem('dailySecretWords')) || [];
+let dailySecretFound = JSON.parse(localStorage.getItem('dailySecretFound')) || false;
+let gameOver = JSON.parse(localStorage.getItem('gameOver')) || false;
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
 gameLoop();
+
+function generateDailySecrets(num) {
+    dailySecretWords = [];
+    for (let i = 0; i < num; i++) {
+        const randomIndex = Math.floor(Math.random() * targetWords.length - 1);
+        const randomWord = targetWords[randomIndex];
+        const permanentSecretCodes = secretCodes.map(code => code.key);
+        if (randomWord !== targetWord && !permanentSecretCodes.includes(randomWord)) {
+            dailySecretWords.push(randomWord);
+        }
+    }
+    localStorage.setItem('dailySecretWords', JSON.stringify(dailySecretWords));
+}
 
 function resultsText() {
     const tiles = [...document.querySelectorAll('.tile')];
@@ -2381,7 +2386,9 @@ function resultsText() {
     for (let i = 0; i < 6; i++) {
         result += grid.slice(i*5, i*5+5).join('') + "\n";
     }
-    return result.trim();
+    result.trim();
+    if (dailySecretFound) result += '\n⭐Secret Found!⭐'
+    return result;
 }
 
 function copyToClipboard() {
@@ -2417,6 +2424,7 @@ function populateStats() {
     const record = modal.querySelector('#record');
     const non_word_guesses = modal.querySelector('#non-word');
     const secrets_found = modal.querySelector('#secrets');
+    const shareBtn = modal.querySelector('#share-btn');
 
     const bars = modal.querySelectorAll('.bar-bar');
     const lastGame = stats.gamesPlayed[stats.gamesPlayed.length - 1];
@@ -2453,6 +2461,18 @@ function populateStats() {
     record.innerText = stats.winStreakRecord;
     non_word_guesses.innerText = stats.nonWordGuesses;
     secrets_found.innerText = `${stats.secretsFound.length} / ${secretCodes.length}`;
+
+    // only show bar highlight in green and share btn if the current game is over:
+    if (!gameOver) {
+        if (shareBtn) shareBtn.parentElement.style.display = 'none';
+        bars.forEach(bar => bar.classList.remove('current'));
+    }
+    else shareBtn.parentElement.style.display = 'block';
+
+    if (dailySecretFound) {
+        const foundSecretMsg = modal.querySelector('.found-secret-msg-container');
+        foundSecretMsg.style.display = 'block';
+    }
 }
 
 function updateCountdown() {
@@ -2475,8 +2495,19 @@ function newDay() {
     const today = new Date().toLocaleDateString();
     if (JSON.parse(localStorage.getItem('lastDate')) === today) return false;
     localStorage.setItem('lastDate', JSON.stringify(today));
-    priorGuesses = []
-    localStorage.setItem('priorGuesses', JSON.stringify(priorGuesses));    
+    
+    priorGuesses = [];
+    localStorage.setItem('priorGuesses', JSON.stringify(priorGuesses));
+    
+    dailySecretFound = false;
+    localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
+    
+    gameOver = false;
+    localStorage.setItem('gameOver', JSON.stringify(gameOver));
+
+    generateDailySecrets(100);
+    localStorage.setItem('dailySecretWords', JSON.stringify(dailySecretWords));
+
     return true;
 }
 
@@ -2492,6 +2523,8 @@ function closeSecretModal() {
     modal.querySelectorAll('div').forEach(div => {
         if (div.id !== 'secret-modal-close-btn') modal.removeChild(div);
     });
+    // reset darkened background since for "crack" secret we dont want it dark
+    modal.style.backgroundColor = 'transparent';
     modal.classList.toggle('hide');
 }
 
@@ -2517,7 +2550,6 @@ function gameLoop() {
     window.addEventListener('resize', setBodyHeight);
 
     const timer = setInterval(updateCountdown, 1000);
-    populateStats()
 
     const statsCloseBtn = document.querySelector('#stats-close-btn');
     const secretModalCloseBtn = document.querySelector('#secret-modal-close-btn')
@@ -2528,7 +2560,7 @@ function gameLoop() {
     statsCloseBtn.addEventListener('click', showStats);
     secretModalCloseBtn.addEventListener('click', closeSecretModal);
     statsBtn.addEventListener('click', showStats);
-    shareBtn.addEventListener('click', copyToClipboard);
+    if (gameOver) shareBtn.addEventListener('click', copyToClipboard);
     
     // if it't not a new day, load the prior guesses in local storage
     if (!newDay()) {
@@ -2540,6 +2572,7 @@ function gameLoop() {
         console.log('A brand new day!')
         reloadPriorGuesses = false;
     }
+    populateStats()
     startInteraction();
 }
 
@@ -2761,8 +2794,10 @@ function checkWin(guess) {
             stats.winStreakRecord = stats.winStreak > stats.winStreakRecord ? stats.winStreak : stats.winStreakRecord;
             localStorage.setItem('stats', JSON.stringify(stats));
         }
+        gameOver = true;
+        localStorage.setItem('gameOver', JSON.stringify(gameOver));    
         populateStats();
-        setTimeout(showStats, 1500)
+        setTimeout(showStats, 1000)
         return true;
     }
     else if (guess !== targetWord && totalLetters >= 30) {
@@ -2785,9 +2820,12 @@ function checkWin(guess) {
         if (guess === priorGuesses[priorGuesses.length - 1]) {
             makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
             console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
-            populateStats();
-            setTimeout(showStats, 1500)    
+            setTimeout(showStats, 1000)    
         }
+
+        gameOver = true;
+        localStorage.setItem('gameOver', JSON.stringify(gameOver)); 
+        populateStats();   
     }
     return false;
 }
@@ -2831,22 +2869,38 @@ function captureKey(e) {
     }
     else key = e.key;
     if (key !== 'Enter') {
-        for (let secretCode of secretCodes) {
-            const char = key;
-            const regex = new RegExp('^[a-z]$', 'i');
-            if (char.match(regex)) secretCode.sequence.push(key.toLowerCase());
-            if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
+        checkSecretCodes(secretCodes, key);
+    }
+}
 
-            if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
-            
-            if (secretCode.sequence.join('') === secretCode.key) {
-                makeAlert('Secret Found!');
-                secretCode.func();
-                if (!stats.secretsFound.includes(secretCode.key)) {
-                    stats.secretsFound.push(secretCode.key);
-                    localStorage.setItem('stats', JSON.stringify(stats));
-                }
+function checkSecretCodes(secretCodesArray, char) {
+    for (let secretCode of secretCodesArray) {
+        const regex = new RegExp('^[a-z]$', 'i');
+        if (char.match(regex)) secretCode.sequence.push(char.toLowerCase());
+        if (char === 'Backspace' || char === 'Delete') secretCode.sequence.pop();
+
+        if (secretCode.sequence.length > secretCode.key.length) secretCode.sequence.splice(0,1);
+        
+        if (secretCode.sequence.join('') === secretCode.key) {
+            makeAlert('Secret Found!', 2000);
+            secretCode.func();
+            if (!stats.secretsFound.includes(secretCode.key)) {
+                stats.secretsFound.push(secretCode.key);
+                localStorage.setItem('stats', JSON.stringify(stats));
+            }
+            dailySecretFound = true;
+            localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
+            populateStats();
+            return;
+        }
+        for (let word of dailySecretWords) {
+            if (secretCode.sequence.join('') === word) {
+                makeAlert('Daily Secret Found!', 2000);
+                generateGif(word);
+                dailySecretFound = true;
+                localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
                 populateStats();
+                return;
             }
         }
     }
@@ -2912,7 +2966,7 @@ function waves() {
     victoryDance(keys);
 }
 
-function breakScreen() {
+function crack() {
     const modal = document.querySelector('#crack-modal');
     
     const crack1 = document.createElement('img');
@@ -2972,9 +3026,9 @@ function snowy() {
         flake.setAttribute('src', './images/snowflake.png');
         flake.style.left = `${Math.random() * vw}px`;
         flake.style.animation = `fall ${Math.random() * (40-20+1) + 20}s linear`
-        document.body.appendChild(flake);
+        body.appendChild(flake);
         flake.addEventListener('animationend', () => {
-            document.body.removeChild(flake);
+            body.removeChild(flake);
         });
     }, 1000)
 }
@@ -2994,6 +3048,37 @@ function arash() {
     text.innerText = 'HAPPY BIRTHDAY!';
     text.style.animation = 'dance 500ms ease-in-out';
     modal.appendChild(text);
+}
+
+function generateGif(word) {
+    const modal = document.querySelector('#crack-modal');
+
+    const api = 'http://api.giphy.com/v1/gifs/search?';
+    const key = '&api_key=dFRvVTlP2eISiJSn087SVBpGpDNbWNPg';
+    const query = `&q=${word}`;
+    const url = api + key + query;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(giphy => {
+            const rand = Math.floor(Math.random() * (giphy.data.length));  // giphy API returns an array of results, choose a random one
+            if (giphy.data[rand].images.original.url !== '') {
+                makeAlert(`Generating Random Gif for ${word.toUpperCase()}...`, 3000);
+                
+                const gif = document.createElement('img');
+                gif.setAttribute('src', giphy.data[rand].images.original.url);
+                gif.classList.add('gif');
+                gif.addEventListener('click', closeSecretModal);
+
+                modal.appendChild(gif);
+                modal.classList.toggle('hide');
+                modal.style.backgroundColor= 'rgba(0,0,0,0.4)';
+                return;
+            }
+            else {
+                generateGif(word);
+            }
+        })
 }
 
 

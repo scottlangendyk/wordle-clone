@@ -310,7 +310,7 @@ body {
     left: 50vw;
     transform: translateX(-50%);
     gap: 0.5rem;
-    z-index: 1;
+    z-index: 200;
 }
 
 .alert {
@@ -581,4 +581,58 @@ footer > a {
     position: relative;
     top: -17%;
     text-align: center;
+}
+
+.gif {
+    max-width: 90%;
+    max-height: 90%;
+    cursor: pointer;
+    z-index: 100;
+    pointer-events: visible;
+    cursor: pointer;
+}
+
+.found-secret-msg-container {
+    display: none;
+    animation: multicolor 5000ms infinite alternate;
+    transition: color 100ms ease-in-out;
+    font-size: clamp(1rem, 2vmin, 2rem);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+@keyframes multicolor {
+    0% {
+        color: blue;
+    }
+    10% {
+        color: #8e44ad;
+    }
+    20% {
+        color: #1abc9c;
+    }
+    30% {
+        color: #d35400;
+    }
+    40% {
+        color: red;
+    }
+    50% {
+        color: #34495e;
+    }
+    60% {
+        color: green;
+    }
+    70% {
+        color: #2980b9;
+    }
+    80% {
+        color: #f1c40f;
+    }
+    90% {
+        color: #2980b9;
+    }
+    100% {
+        color: pink;
+    }
 }
