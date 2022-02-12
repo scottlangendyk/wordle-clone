@@ -2357,6 +2357,7 @@ const secretCodes = [
     {key: 'crack', sequence: [], func: breakScreen},
     {key: 'space', sequence: [], func: space},
     {key: 'davis', sequence: [], func: davis},
+    {key: 'snowy', sequence: [], func: snowy},
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2384,7 +2385,7 @@ function resultsText() {
 
 function copyToClipboard() {
 
-    // if navigator.share API is supported and user device IS NOT mobile device:
+    // if navigator.share API is supported and user device IS a mobile device:
     // use navigator.share: this will open up the mobile share options 
     if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
         navigator.share({
@@ -2897,7 +2898,7 @@ function waves() {
     const keys = keyboard.querySelectorAll('.key');
     keys.forEach(key => {
         key.style.backgroundColor = 'transparent';
-        key.style.backgroundImage = 'url(water.png)';
+        key.style.backgroundImage = 'url(./images/water.png)';
         key.style.backgroundSize = 'cover';
         // if (key.classList.contains("absent")) key.style.color = 'hsl(240,2%,23%)';
         // if (key.classList.contains("present")) key.style.color = 'hsl(49,51%,47%)';
@@ -2911,11 +2912,11 @@ function breakScreen() {
     const modal = document.querySelector('#crack-modal');
     
     const crack1 = document.createElement('img');
-    crack1.setAttribute('src', 'crack.png');
+    crack1.setAttribute('src', './images/crack.png');
     crack1.id = 'crack1'
     
     const crack2 = document.createElement('img');
-    crack2.setAttribute('src', 'crack2.png');
+    crack2.setAttribute('src', './images/crack2.png');
     crack2.id = 'crack2';
 
     modal.appendChild(crack1);
@@ -2927,15 +2928,11 @@ function breakScreen() {
 function space() {
     const body = document.querySelector('body');
     const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    if (vw < 400) {
-        body.style.backgroundImage = 'url("space-mobile.jpg")';
-        body.style.backgroundPosition = 'bottom center';
-    }
-    else body.style.backgroundImage = 'url("space-desktop.jpg")';
+    body.style.backgroundImage = 'url("./images/space-desktop.jpg")';
 
     const astronaut = document.createElement('img');
     astronaut.classList.add('astro');
-    astronaut.setAttribute('src', 'astronaut.png');
+    astronaut.setAttribute('src', './images/astronaut.png');
     document.body.appendChild(astronaut);
     astronaut.addEventListener('animationend', () => {
         document.body.removeChild(astronaut);
@@ -2951,13 +2948,18 @@ function davis() {
 
     const wanted = document.createElement('img');
     wanted.classList.add('wanted');
-    wanted.setAttribute('src', 'davis.png');
+    wanted.setAttribute('src', './images/davis.png');
     wanted.addEventListener('click', closeSecretModal);
     modal.appendChild(wanted);
+}
 
-    // setTimeout(() => {
-    //     modal.removeChild(wanted);
-    // }, 2500);
+function snowy() {
+    const body = document.querySelector('body');
+    // const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        body.style.backgroundImage = 'url("./images/snowy-mobile.jpg")';
+    }
+    else body.style.backgroundImage = 'url("./images/snowy.jpg")';
 }
 
 
