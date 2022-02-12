@@ -87,6 +87,14 @@ body {
     touch-action: manipulation;
 }
 
+@media only screen and (max-width: 600px) {
+    .keyboard {
+        gap: 0.5em;
+        grid-auto-rows: 3.5rem;
+        padding-inline: 0.3rem;
+    }
+}
+
 .key {
     color: hsl(var(--clr-key-text));
     background-color: hsl(
@@ -98,7 +106,7 @@ body {
     font-weight: bold;
     grid-column: span 2;
     border: none;
-    padding: 0;
+    padding:0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -167,7 +175,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: clamp(0.5rem, 4vmin, 4rem);
+    font-size: clamp(0.5em, 2.5vmin, 2em);
     font-weight: bold;
     background-color: hsl(
         var(--hue, 240), 
@@ -177,6 +185,12 @@ body {
     user-select: none;
     text-transform: uppercase;
     transition: transform 250ms ease-in-out;
+}
+
+@media only screen and (max-width: 600px) {
+    .tile {
+        font-size: clamp(0.5em, 5vmin, 2em);
+    }
 }
 
 .tile.active {
