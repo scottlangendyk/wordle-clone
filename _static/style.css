@@ -572,3 +572,13 @@ footer > a {
         transform: translateY(120vh);
     }
 }
+
+.text-overlay {
+    color: pink;
+    z-index: 101;
+    font-size: 3rem;
+    font-weight: bold;
+    position: relative;
+    top: -17%;
+    text-align: center;
+}

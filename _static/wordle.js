@@ -2358,6 +2358,7 @@ const secretCodes = [
     {key: 'space', sequence: [], func: space},
     {key: 'davis', sequence: [], func: davis},
     {key: 'snowy', sequence: [], func: snowy},
+    {key: 'arash', sequence: [], func: arash},
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2488,6 +2489,9 @@ function showStats() {
 function closeSecretModal() {
     const modal = document.querySelector('#crack-modal');
     modal.querySelectorAll('img').forEach(img => modal.removeChild(img));
+    modal.querySelectorAll('div').forEach(div => {
+        if (div.id !== 'secret-modal-close-btn') modal.removeChild(div);
+    });
     modal.classList.toggle('hide');
 }
 
@@ -2973,6 +2977,23 @@ function snowy() {
             document.body.removeChild(flake);
         });
     }, 1000)
+}
+
+function arash() {
+    const modal = document.querySelector('#crack-modal');
+    modal.classList.toggle('hide');
+
+    const arash = document.createElement('img');
+    arash.classList.add('wanted');
+    arash.setAttribute('src', './images/arash.jpg');
+    arash.addEventListener('click', closeSecretModal);
+    modal.appendChild(arash);
+
+    const text = document.createElement('div');
+    text.classList.add('text-overlay');
+    text.innerText = 'HAPPY BIRTHDAY!';
+    text.style.animation = 'dance 500ms ease-in-out';
+    modal.appendChild(text);
 }
 
 
