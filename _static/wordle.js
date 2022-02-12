@@ -2336,6 +2336,7 @@ const statHolder = {
     winStreak: 0,
     winStreakRecord: 0,
     nonWordGuesses: 0,
+    dailySecretCount: 0,
     secretsFound: [],
 };
 
@@ -2355,6 +2356,7 @@ let dailySecretWords = JSON.parse(localStorage.getItem('dailySecretWords')) || [
 let dailySecretFound = JSON.parse(localStorage.getItem('dailySecretFound')) || false;
 let gameOver = JSON.parse(localStorage.getItem('gameOver')) || false;
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
+if (!stats.dailySecretCount) stats.dailySecretCount = 0;
 gameLoop();
 
 function generateDailySecrets(num) {
@@ -2423,6 +2425,7 @@ function populateStats() {
     const streak = modal.querySelector('#streak');
     const record = modal.querySelector('#record');
     const non_word_guesses = modal.querySelector('#non-word');
+    const daily_secrets = modal.querySelector('#daily-secrets');
     const secrets_found = modal.querySelector('#secrets');
     const shareBtn = modal.querySelector('#share-btn');
 
@@ -2460,6 +2463,7 @@ function populateStats() {
     streak.innerText = stats.winStreak;
     record.innerText = stats.winStreakRecord;
     non_word_guesses.innerText = stats.nonWordGuesses;
+    daily_secrets.innerText = stats.dailySecretCount;
     secrets_found.innerText = `${stats.secretsFound.length} / ${secretCodes.length}`;
 
     // only show bar highlight in green and share btn if the current game is over:
@@ -2505,7 +2509,7 @@ function newDay() {
     gameOver = false;
     localStorage.setItem('gameOver', JSON.stringify(gameOver));
 
-    generateDailySecrets(100);
+    generateDailySecrets(50);
     localStorage.setItem('dailySecretWords', JSON.stringify(dailySecretWords));
 
     return true;
@@ -2797,7 +2801,7 @@ function checkWin(guess) {
         gameOver = true;
         localStorage.setItem('gameOver', JSON.stringify(gameOver));    
         populateStats();
-        setTimeout(showStats, 1000)
+        setTimeout(showStats, 1000);
         return true;
     }
     else if (guess !== targetWord && totalLetters >= 30) {
@@ -2820,12 +2824,12 @@ function checkWin(guess) {
         if (guess === priorGuesses[priorGuesses.length - 1]) {
             makeAlert(`Today's word was: ${targetWord.toUpperCase()}`)
             console.log("No dice.  Maybe you should give this a quick read: \n https://www.amazon.ca/Oxford-Dictionary-English-Dictionaries/dp/0199571120");
-            setTimeout(showStats, 1000)    
+            setTimeout(showStats, 1000);
         }
 
         gameOver = true;
         localStorage.setItem('gameOver', JSON.stringify(gameOver)); 
-        populateStats();   
+        populateStats();
     }
     return false;
 }
@@ -2883,6 +2887,7 @@ function checkSecretCodes(secretCodesArray, char) {
         
         if (secretCode.sequence.join('') === secretCode.key) {
             makeAlert('Secret Found!', 2000);
+            clearImages();
             secretCode.func();
             if (!stats.secretsFound.includes(secretCode.key)) {
                 stats.secretsFound.push(secretCode.key);
@@ -2896,14 +2901,22 @@ function checkSecretCodes(secretCodesArray, char) {
         for (let word of dailySecretWords) {
             if (secretCode.sequence.join('') === word) {
                 makeAlert('Daily Secret Found!', 2000);
+                clearImages();
                 generateGif(word);
                 dailySecretFound = true;
                 localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
+                stats.dailySecretCount ? stats.dailySecretCount++ : stats.dailySecretCount = 1;
+                localStorage.setItem('stats', JSON.stringify(stats));
                 populateStats();
                 return;
             }
         }
     }
+}
+
+function clearImages() {
+    const images = document.querySelectorAll('img');
+    images.forEach(img => img.remove());
 }
 
 function corns() {

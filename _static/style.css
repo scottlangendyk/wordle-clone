@@ -117,6 +117,11 @@ body {
     /* don't allow text highlighting */
     user-select: none; 
     touch-action: manipulation;
+    transition: transform 150ms ease-in-out;
+}
+
+.key.flip {
+    transform: rotateX(90deg);
 }
 
 .key.large {
