@@ -2955,11 +2955,24 @@ function davis() {
 
 function snowy() {
     const body = document.querySelector('body');
-    // const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+
     if (/Mobi|Android/i.test(navigator.userAgent)) {
         body.style.backgroundImage = 'url("./images/snowy-mobile.jpg")';
     }
     else body.style.backgroundImage = 'url("./images/snowy.jpg")';
+
+    setInterval(() => {
+        const flake = document.createElement('img');
+        flake.classList.add('snowflake');
+        flake.setAttribute('src', './images/snowflake.png');
+        flake.style.left = `${Math.random() * vw}px`;
+        flake.style.animation = `fall ${Math.random() * (40-20+1) + 20}s linear`
+        document.body.appendChild(flake);
+        flake.addEventListener('animationend', () => {
+            document.body.removeChild(flake);
+        });
+    }, 1000)
 }
 
 

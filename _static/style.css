@@ -557,3 +557,18 @@ footer > a {
     color:rgb(173, 58, 58);
     font-size: inherit;
 }
+
+.snowflake {
+    position: fixed;
+    z-index: 100;
+    top: -10%;
+    animation: fall 30s linear;
+    animation-iteration-count: 1;
+    height: 5vh;
+}
+
+@keyframes fall {
+    100% {
+        transform: translateY(120vh);
+    }
+}
