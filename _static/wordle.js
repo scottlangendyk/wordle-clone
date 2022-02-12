@@ -2350,6 +2350,7 @@ const secretCodes = [
     {key: 'snowy', sequence: [], func: snowy},
     {key: 'arash', sequence: [], func: arash},
     {key: 'echo', sequence: [], func: echo},
+    {key: 'flips', sequence: [], func: flips},
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -3105,6 +3106,10 @@ function echo() {
         makeAlert(msg, 3000);
         if (++count >= 5) window.clearInterval(interval);
     }, 500)
+}
+
+function flips() {
+    document.body.style.transform = 'rotateY(180deg)';
 }
 
 
