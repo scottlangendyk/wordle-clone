@@ -2349,6 +2349,7 @@ const secretCodes = [
     {key: 'davis', sequence: [], func: davis},
     {key: 'snowy', sequence: [], func: snowy},
     {key: 'arash', sequence: [], func: arash},
+    {key: 'echo', sequence: [], func: echo},
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2856,7 +2857,7 @@ function makeAlert(content, duration = 1000) {
     const newAlert = document.createElement('div');
     newAlert.classList.add('alert');
     newAlert.innerText = content;
-    alertContainer.prepend(newAlert);
+    alertContainer.append(newAlert);
     newAlert.addEventListener('transitionend', () => {
         newAlert.remove();
     })
@@ -3092,6 +3093,18 @@ function generateGif(word) {
                 generateGif(word);
             }
         })
+}
+
+function echo() {
+    let count = 0;
+    const interval = setInterval(() => {
+        let msg = 'ECHO!';
+        for (let i = 0; i < count; i++) {
+            msg = '(' + msg + ')'
+        }
+        makeAlert(msg, 3000);
+        if (++count >= 5) window.clearInterval(interval);
+    }, 500)
 }
 
 
