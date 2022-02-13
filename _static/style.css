@@ -10,6 +10,8 @@
     --clr-light: 231 77% 90%;
     --clr-white: 0 0% 100%;
     --clr-key-text: 204, 7%, 85%;
+    --clr-correct : 115 29% 43%;
+    --clr-present : 49 51% 47%;
     --vh: 1vh;
 }
 
@@ -335,6 +337,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     background-color: hsla(var(--clr-white) / 0.86);
     color: hsl(var(--clr-dark));
     padding: 1rem 1.5rem;
@@ -394,9 +397,11 @@ body {
     padding-bottom: 0.8rem;
     justify-content: center;
     align-items: center;
+    text-align: center;
     font-weight: bold;
     font-size: clamp(0.7rem, 5.2vmin, 1rem);
     letter-spacing: 0.1rem;
+    text-transform: uppercase;
 }
 
 #stats-area {
@@ -694,4 +699,69 @@ footer > a {
 .blur {
     background: hsl( var(--clr-white) / 0.05);
     backdrop-filter: blur(0.3rem);
+}
+
+#version-modal > .modal-container {
+    width: 35rem;
+    padding: 4.5rem 1rem 4.5rem 1rem;
+}
+
+@media only screen and (max-width: 600px) {
+    #version-modal > .modal-container {
+        padding: 2.5rem 1rem 2.5rem 1rem;
+    }
+}
+
+.modal-announcement {
+    color: hsl(var(--clr-present));
+    /* color: rgb(173, 58, 58); */
+    font-weight: bold;
+    font-size: clamp(1rem, 7vmin, 3rem);
+    letter-spacing: 0.12rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid hsla(var(--clr-white) / 0.3);
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .modal-announcement {
+        font-size: 1.5rem;
+    }
+}
+
+#version-modal .modal-title {
+    color: hsl(var(--clr-correct));
+    padding: 3.5rem 0 2.5rem 0;
+    font-size: 1.5rem;
+}
+
+@media only screen and (max-width: 600px) {
+    #version-modal .modal-title {
+        font-size: 1.1rem;
+        padding: 2.5rem 0 1.5rem 0;
+    }
+}
+
+#version-modal .version-modal-content {
+    text-align: center;
+    max-width: 70%;
+    font-size: 1.3rem;
+}
+
+@media only screen and (max-width: 600px) {
+    #version-modal .version-modal-content {
+        max-width: 90%;
+        font-size: 1.1rem;
+    }
+}
+
+#version-modal .guess-grid {
+    padding: 3rem 0 3rem 0;
+}
+
+@media only screen and (max-width: 600px) {
+    #version-modal .guess-grid {
+        transform: scale(0.8);
+        padding: 1.5rem 0 1.5rem 0;
+    }
 }

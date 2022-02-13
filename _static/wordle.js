@@ -2320,6 +2320,7 @@ const guessWords = [
 ];
 
 const WORD_LENGTH = 5;
+const CURRENT_VERSION = 1;
 let targetWord;
 let gameNumber;
 let reloadPriorGuesses = false;
@@ -2364,13 +2365,58 @@ const secretCodes = [
     {key: 'chaos', sequence: [], func: chaos},
 ];
 
+let version = JSON.parse(localStorage.getItem('version')) || 0;
+if (+version !== CURRENT_VERSION) versionUpdate();
+
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
 let dailySecretWords = JSON.parse(localStorage.getItem('dailySecretWords')) || [];
 let dailySecretFound = JSON.parse(localStorage.getItem('dailySecretFound')) || false;
 let gameOver = JSON.parse(localStorage.getItem('gameOver')) || false;
+
 const stats = JSON.parse(localStorage.getItem('stats')) || statHolder;
 if (!stats.dailySecretCount) stats.dailySecretCount = 0;
 gameLoop();
+
+function versionUpdate() {
+    const modal = document.querySelector('#version-modal');
+    const contentContainer = modal.querySelector('.modal-container');
+
+    const title = document.createElement('div');
+    title.classList.add('modal-announcement');
+    title.innerText = 'SHMURDLE ALERT';
+
+    const subtitle = document.createElement('div');
+    subtitle.classList.add('modal-title');
+    subtitle.innerText = 'Introducing: Daily Anomalies';
+
+    const content1 = document.createElement('div');
+    content1.classList.add('version-modal-content');
+    content1.innerText = 'Certain words seem to be exhibiting unusual behaviour...';
+
+    const grid = document.createElement('div');
+    grid.classList.add('guess-grid');
+    const word = 'WEIRD';
+    for (let letter of word) {
+        const tile = document.createElement('div');
+        tile.classList.add('tile');
+        tile.innerText = letter;
+        tile.style.animation = 'rotate 6000ms linear infinite'
+        grid.appendChild(tile);
+    }
+
+    const content2 = document.createElement('div');
+    content2.classList.add('version-modal-content');
+    content2.innerText = 'See if you can identify these mischievous words each day. Be sure to report your findings back to headquarters.';
+
+    contentContainer.appendChild(title);
+    contentContainer.appendChild(subtitle);
+    contentContainer.appendChild(content1);
+    contentContainer.appendChild(grid);
+    contentContainer.appendChild(content2);
+
+    modal.classList.remove('hide');
+    localStorage.setItem('version', JSON.stringify(CURRENT_VERSION));
+}
 
 function generateDailySecrets(num) {
     dailySecretWords = [];
@@ -2488,7 +2534,7 @@ function populateStats() {
 
     if (dailySecretFound !== false) {
         const foundSecretMsg = modal.querySelector('.found-secret-msg-container');
-        foundSecretMsg.innerText = `⭐${dailySecretFound} Found!⭐`;
+        foundSecretMsg.innerText = `⭐${dailySecretFound} Found⭐`;
         foundSecretMsg.style.display = 'block';
     }
 }
@@ -2543,6 +2589,13 @@ function closeSecretModal() {
     });
     // reset darkened background since for "crack" secret we dont want it dark
     modal.style.backgroundColor = 'transparent';
+    modal.classList.remove('blur');
+    modal.classList.toggle('hide');
+}
+
+// modal used to display new content due to updates/version changes:
+function closeVersionModal() {
+    const modal = document.querySelector('#version-modal');
     modal.classList.toggle('hide');
 }
 
@@ -2570,13 +2623,15 @@ function gameLoop() {
     const timer = setInterval(updateCountdown, 1000);
 
     const statsCloseBtn = document.querySelector('#stats-close-btn');
-    const secretModalCloseBtn = document.querySelector('#secret-modal-close-btn')
+    const secretModalCloseBtn = document.querySelector('#secret-modal-close-btn');
+    const versionModalCloseBtn = document.querySelector('#version-close-btn');
     const statsBtn = document.querySelector('.stats-btn');
     const shareBtn = document.querySelector('#share-btn');
 
     // initalize modal btn event listeners
     statsCloseBtn.addEventListener('click', showStats);
     secretModalCloseBtn.addEventListener('click', closeSecretModal);
+    versionModalCloseBtn.addEventListener('click', closeVersionModal);
     statsBtn.addEventListener('click', showStats);
     shareBtn.addEventListener('click', copyToClipboard);
     
@@ -2924,7 +2979,7 @@ function checkSecretCodes(secretCodesArray, char) {
         }
         for (let word of dailySecretWords) {
             if (secretCode.sequence.join('') === word) {
-                makeAlert('Daily Secret Found!', 2000);
+                makeAlert('Daily Anomaly Found!', 2000);
         
                 const randomIndex = Math.floor(Math.random() * secretAnimations.length);
                 if (secretAnimations[randomIndex].name === 'generateGif') generateGif(word);
@@ -3160,7 +3215,7 @@ function chaos() {
 }
 
 function blurs() {
-    modal = document.querySelector('.modal')
+    modal = document.querySelector('#crack-modal')
     modal.classList.remove('hide');
     modal.classList.add('blur');
 }
