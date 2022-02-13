@@ -2596,6 +2596,7 @@ function closeSecretModal() {
 // modal used to display new content due to updates/version changes:
 function closeVersionModal() {
     const modal = document.querySelector('#version-modal');
+    modal.querySelectorAll('div').forEach(div => div.remove());
     modal.classList.toggle('hide');
 }
 
