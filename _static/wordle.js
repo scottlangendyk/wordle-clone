@@ -2369,7 +2369,7 @@ let version = JSON.parse(localStorage.getItem('version')) || 0;
 if (+version !== CURRENT_VERSION) versionUpdate();
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
-let dailySecretWords = JSON.parse(localStorage.getItem('dailySecretWords')) || [];
+let dailySecretWords = [];
 let dailySecretFound = JSON.parse(localStorage.getItem('dailySecretFound')) || false;
 let gameOver = JSON.parse(localStorage.getItem('gameOver')) || false;
 
@@ -2572,9 +2572,6 @@ function newDay() {
     gameOver = false;
     localStorage.setItem('gameOver', JSON.stringify(gameOver));
 
-    generateDailySecrets(50);
-    localStorage.setItem('dailySecretWords', JSON.stringify(dailySecretWords));
-
     return true;
 }
 
@@ -2619,6 +2616,10 @@ function gameLoop() {
     const index = Math.floor(daysPast % targetWords.length);
     gameNumber = index;
     targetWord = targetWords[index];
+
+    // generate a list of daily words to use as "Anomaly" secrets:
+    generateDailySecrets(50);
+    localStorage.setItem('dailySecretWords', JSON.stringify(dailySecretWords));
 
     // resets body vertical height on resize
     setBodyHeight();
