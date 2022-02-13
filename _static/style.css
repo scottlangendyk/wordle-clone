@@ -699,7 +699,8 @@ footer > a {
 
 .blur {
     background: hsl( var(--clr-white) / 0.05);
-    backdrop-filter: blur(0.3rem);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 #version-modal > .modal-container {
