@@ -2820,23 +2820,33 @@ function flipTile(tile, index, duration) {
 
 function checkGuess(activeTiles, guess) {
     stopInteraction();
-    for (let i = 0; i < activeTiles.length; i++) {
+    
+    const letterCount = {};
+    for (let i = 0; i < targetWord.length; i++) {
+        if (letterCount[targetWord[i]] === undefined) {
+            letterCount[targetWord[i]] = 1;
+        }
+        else {
+            letterCount[targetWord[i]]++;
+        }
+    }
+
+    for (let i = 0; i < guess.length; i++) {
         flipTile(activeTiles[i], i, 250);
+        
+        let color = null;
+        if (!letterCount[guess[i]] || letterCount[guess[i]] <= 0) color = 'absent';
+        else {
+            letterCount[guess[i]]--;
+            if (targetWord[i] === guess[i]) color = 'correct';
+            else color = 'present';
+        }
         
         activeTiles[i].addEventListener('transitionend', () => {
             activeTiles[i].classList.remove('flip');
+            activeTiles[i].classList.add(color);
+            activeTiles[i].classList.remove('active');
 
-            if (guess[i] === targetWord[i]) {
-                activeTiles[i].classList.add('correct');
-            }
-            else if (targetWord.includes(guess[i])) {
-                activeTiles[i].classList.add('present')
-            }
-            else {
-                activeTiles[i].classList.add('absent')
-            }
-
-            activeTiles[i].classList.remove('active')
             if (i === activeTiles.length - 1) {
                 activeTiles[i].addEventListener('transitionend', doneFlip, false);
                 activeTiles[i].guess = guess;
