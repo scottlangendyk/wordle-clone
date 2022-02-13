@@ -376,6 +376,7 @@ body {
     align-items: center;
     flex-direction: column;
     color: hsl(var(--clr-key-text));
+    width: 400px;
     max-width: 80vw;
     position: relative;
     background: hsl(var(--clr-dark));
