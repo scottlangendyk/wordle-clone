@@ -2351,6 +2351,7 @@ const secretCodes = [
     {key: 'arash', sequence: [], func: arash},
     {key: 'echo', sequence: [], func: echo},
     {key: 'flips', sequence: [], func: flips},
+    {key: 'blurs', sequence: [], func: blurs},
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -3123,6 +3124,37 @@ function chaos() {
         key.style.order = rand;
         rand = Math.floor(Math.random() * (6000 - 3000) + 3000);
         key.style.animation = `multicolor-bg ${rand}ms infinite alternate`;
+    });
+}
+
+function blurs() {
+    modal = document.querySelector('.modal')
+    modal.classList.remove('hide');
+    modal.classList.add('blur');
+}
+
+function multicolorKeyboard() {
+    const keys = document.querySelectorAll('.key');
+    const tiles = document.querySelectorAll('.tile');
+    keys.forEach(key => {
+        const hue = Math.floor(Math.random() * (360-150) + 150);
+        const sat = Math.floor(Math.random() * (100 - 60) + 60);
+        const brightness = Math.floor(Math.random() * (50 - 10) + 10);
+        key.style.backgroundColor = `hsl(
+            var(--hue, ${hue}), 
+            var(--saturation, ${sat}%), 
+            calc(var(--lightness-offset, 0%) + var(--lightness, ${brightness}%))
+        `
+    });
+    tiles.forEach(tile => {
+        const hue = Math.floor(Math.random() * (360-150) + 150);
+        const sat = Math.floor(Math.random() * (100 - 60) + 60);
+        const brightness = Math.floor(Math.random() * (50 - 10) + 10);
+        tile.style.backgroundColor = `hsl(
+            var(--hue, ${hue}), 
+            var(--saturation, ${sat}%), 
+            calc(var(--lightness-offset, 0%) + var(--lightness, ${brightness}%))
+        `
     });
 }
 

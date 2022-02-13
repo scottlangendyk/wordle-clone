@@ -286,7 +286,7 @@ body {
 }
 
 .tile.absent {
-    --hue: 240;
+    --hue: 240; 
     --saturation: 2%;
     --lightness: 23%;
     border: none;
@@ -676,4 +676,9 @@ footer > a {
     100% {
         background-color: pink;
     }
+}
+
+.blur {
+    background: hsl( var(--clr-white) / 0.05);
+    backdrop-filter: blur(0.3rem);
 }
