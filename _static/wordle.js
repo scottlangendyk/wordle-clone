@@ -2420,7 +2420,7 @@ function versionUpdate() {
 
 function generateDailySecrets(num) {
     dailySecretWords = [];
-    const offset = ((gameNumber - 2082) * 50)% (targetWords.length-1);
+    const offset = ((gameNumber - 2082) * num) % (targetWords.length-1);
     let index = offset;
     for (let i = 0; i < num; i++) {
         if (index >= targetWords.length - 1) index = 0;
