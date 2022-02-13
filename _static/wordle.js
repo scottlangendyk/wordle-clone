@@ -2323,6 +2323,15 @@ const WORD_LENGTH = 5;
 let targetWord;
 let gameNumber;
 let reloadPriorGuesses = false;
+const secretAnimations = [
+    {name: 'generateGif', func: generateGif},
+    {name: 'colorBackground', func: colorBackground},
+    {name: 'bounce', func: bounce},
+    {name: 'blink', func: blink},
+    {name: 'flipEachKey', func: flipEachKey},
+    {name: 'multicolorKeyboard', func: multicolorKeyboard},
+    {name: 'rotateTiles', func: rotateTiles},
+];
 const statHolder = {
     // store # of guesses for each game in the gamesPlayed
     gamesPlayed: [
@@ -2352,6 +2361,7 @@ const secretCodes = [
     {key: 'echo', sequence: [], func: echo},
     {key: 'flips', sequence: [], func: flips},
     {key: 'blurs', sequence: [], func: blurs},
+    {key: 'chaos', sequence: [], func: chaos},
 ];
 
 let priorGuesses = JSON.parse(localStorage.getItem('priorGuesses')) || [];
@@ -2589,12 +2599,16 @@ function startInteraction() {
     document.addEventListener('click', captureKey);
     document.addEventListener('keydown', handleKeyPress);
     document.addEventListener('keydown', captureKey);
+    console.log('Starting User Interation');
 }
 
 // stop user from adding letters or submitting guesses
 function stopInteraction() {
     document.removeEventListener('click', handleClick);
     document.removeEventListener('keydown', handleKeyPress);
+    document.removeEventListener('keydown', handleKeyPress);
+    document.removeEventListener('keydown', captureKey);
+    console.log('Stopping User Interation');
 }
 
 // Fisher-Yates shuffle:
@@ -2737,16 +2751,16 @@ function submitGuess() {
     }
 }
 
-function flipTile(tile, index) {
+function flipTile(tile, index, duration) {
     setTimeout(() => {
         tile.classList.add('flip');
-    }, index * 250);
+    }, index * duration);
 }
 
 function checkGuess(activeTiles, guess) {
     stopInteraction();
     for (let i = 0; i < activeTiles.length; i++) {
-        flipTile(activeTiles[i], i);
+        flipTile(activeTiles[i], i, 250);
         
         activeTiles[i].addEventListener('transitionend', () => {
             activeTiles[i].classList.remove('flip');
@@ -2763,16 +2777,22 @@ function checkGuess(activeTiles, guess) {
 
             activeTiles[i].classList.remove('active')
             if (i === activeTiles.length - 1) {
-                activeTiles[i].addEventListener('transitionend', () => {
-                    updateKeyboard(guess);
-                    startInteraction();
-                    const win = checkWin(guess,activeTiles);
-                    if (win === true) {
-                        victoryDance(activeTiles);
-                    }
-                });   
+                activeTiles[i].addEventListener('transitionend', doneFlip, false);
+                activeTiles[i].guess = guess;
+                activeTiles[i].activeTiles = [...activeTiles];
             }
         });
+    }
+}
+
+function doneFlip(e) {
+    const guess = e.currentTarget.guess;
+    const activeTiles = e.currentTarget.activeTiles;
+    updateKeyboard(guess);
+    startInteraction();
+    const win = checkWin(guess,activeTiles);
+    if (win === true) {
+        victoryDance(activeTiles);
     }
 }
 
@@ -2905,7 +2925,19 @@ function checkSecretCodes(secretCodesArray, char) {
             if (secretCode.sequence.join('') === word) {
                 makeAlert('Daily Secret Found!', 2000);
                 clearImages();
-                generateGif(word);
+        
+                const randomIndex = Math.floor(Math.random() * secretAnimations.length);
+                if (secretAnimations[randomIndex].name === 'generateGif') generateGif(word);
+                else if (secretAnimations[randomIndex].name === 'blink') {
+                    let count = 0;
+                    const interval = setInterval(() => {
+                        blink();
+                        if (++count >= 2) window.clearInterval(interval);
+
+                    }, 500);
+                }
+                else secretAnimations[randomIndex].func();
+
                 dailySecretFound = true;
                 localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
                 stats.dailySecretCount ? stats.dailySecretCount++ : stats.dailySecretCount = 1;
@@ -3155,6 +3187,53 @@ function multicolorKeyboard() {
             var(--saturation, ${sat}%), 
             calc(var(--lightness-offset, 0%) + var(--lightness, ${brightness}%))
         `
+    });
+}
+
+function flipEachKey() {
+    // debugger
+    const keys = document.querySelectorAll('.key');
+    stopInteraction();
+
+    for (let i = 0; i < keys.length; i++) {
+        flipTile(keys[i], i, 100);
+        keys[i].addEventListener('transitionend', () => {
+            keys[i].classList.remove('flip');
+            if (i === keys.length - 1) {
+                keys[i].addEventListener('transitionend', () => {
+                    startInteraction();
+                });
+            }
+        });
+    }
+}
+
+function blink() {
+    const keys = document.querySelectorAll('.key');
+    
+    for (let i = 0; i < keys.length; i++) {
+        keys[i].classList.add('flip');
+        keys[i].addEventListener('transitionend', () => {
+            keys[i].classList.remove('flip');
+        });
+    }
+}
+
+function bounce() {
+    const keys = document.querySelectorAll('.key');
+    const tiles = document.querySelectorAll('.tile');
+    victoryDance(keys);
+    victoryDance(tiles);
+}
+
+function colorBackground() {
+    document.body.style.animation = `multicolor-bg 50000ms infinite alternate`;
+}
+
+function rotateTiles() {
+    const tiles = document.querySelectorAll('.tile');
+    tiles.forEach(tile => {
+        tile.style.animation = 'rotate 3000ms linear';
     });
 }
 

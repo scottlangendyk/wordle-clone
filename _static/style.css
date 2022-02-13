@@ -29,6 +29,7 @@ body {
     height: calc(var(--vh, 1vh) * 100);
     padding: 0;
     font-size: clamp(.5rem, 2.5vmin, 1.5rem);
+    transition: background-color 5s ease;
 }
 
 .header {
@@ -304,6 +305,18 @@ body {
     --saturation: 29%;
     --lightness: 43%;
     border: none;
+}
+
+@keyframes rotate {
+   0% {
+       transform: rotateZ(0deg);
+   }
+    50% {
+        transform: rotateZ(180deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
 }
 
 .alert-container {
