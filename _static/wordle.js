@@ -2420,13 +2420,16 @@ function versionUpdate() {
 
 function generateDailySecrets(num) {
     dailySecretWords = [];
+    const offset = ((gameNumber - 2082) * 50)% (targetWords.length-1);
+    let index = offset;
     for (let i = 0; i < num; i++) {
-        const randomIndex = Math.floor(Math.random() * targetWords.length - 1);
-        const randomWord = targetWords[randomIndex];
+        if (index >= targetWords.length - 1) index = 0;
+        const wordToAdd = targetWords[index];
         const permanentSecretCodes = secretCodes.map(code => code.key);
-        if (randomWord !== targetWord && !permanentSecretCodes.includes(randomWord)) {
-            dailySecretWords.push(randomWord);
+        if (wordToAdd !== targetWord && !permanentSecretCodes.includes(wordToAdd)) {
+            dailySecretWords.push(wordToAdd);
         }
+        index++;
     }
     localStorage.setItem('dailySecretWords', JSON.stringify(dailySecretWords));
 }
