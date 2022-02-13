@@ -2983,8 +2983,9 @@ function checkSecretCodes(secretCodesArray, char) {
             return;
         }
         // for testing purposes
-        if (secretCode.sequence.join('') === secretCode.key === 'xxxxx') {
+        if (secretCode.sequence.join('') === 'xxxxx') {
             generateGif('covid');
+            return;
         }
         for (let word of dailySecretWords) {
             if (secretCode.sequence.join('') === word) {
