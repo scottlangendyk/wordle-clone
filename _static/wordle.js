@@ -2982,6 +2982,10 @@ function checkSecretCodes(secretCodesArray, char) {
             populateStats();
             return;
         }
+        // for testing purposes
+        if (secretCode.sequence.join('') === secretCode.key === 'xxxxx') {
+            generateGif('covid');
+        }
         for (let word of dailySecretWords) {
             if (secretCode.sequence.join('') === word) {
                 makeAlert('Daily Anomaly Found!', 2000);
@@ -3288,13 +3292,21 @@ function bounce() {
 
 function colorBackground() {
     document.body.style.animation = `multicolor-bg 50000ms infinite alternate`;
+    setTimeout(() => {
+        document.body.style.animation = "";
+    },15000);
 }
 
 function rotateTiles() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach(tile => {
         tile.style.animation = 'rotate 1000ms linear';
+        setTimeout(() => {
+            tile.style.animation = "";
+        },2000)
     });
+
+    
 }
 
 
