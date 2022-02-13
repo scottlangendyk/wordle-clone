@@ -2402,7 +2402,7 @@ function resultsText() {
         result += grid.slice(i*5, i*5+5).join('') + "\n";
     }
     result.trim();
-    if (dailySecretFound) result += '\n⭐Secret Found!⭐'
+    if (dailySecretFound !== false) result += `\n⭐${dailySecretFound} Found!⭐`
     return result;
 }
 
@@ -2486,8 +2486,9 @@ function populateStats() {
     }
     else shareBtn.parentElement.style.display = 'block';
 
-    if (dailySecretFound) {
+    if (dailySecretFound !== false) {
         const foundSecretMsg = modal.querySelector('.found-secret-msg-container');
+        foundSecretMsg.innerText = `⭐${dailySecretFound} Found!⭐`;
         foundSecretMsg.style.display = 'block';
     }
 }
@@ -2577,7 +2578,7 @@ function gameLoop() {
     statsCloseBtn.addEventListener('click', showStats);
     secretModalCloseBtn.addEventListener('click', closeSecretModal);
     statsBtn.addEventListener('click', showStats);
-    if (gameOver) shareBtn.addEventListener('click', copyToClipboard);
+    shareBtn.addEventListener('click', copyToClipboard);
     
     // if it't not a new day, load the prior guesses in local storage
     if (!newDay()) {
@@ -2916,7 +2917,7 @@ function checkSecretCodes(secretCodesArray, char) {
                 stats.secretsFound.push(secretCode.key);
                 localStorage.setItem('stats', JSON.stringify(stats));
             }
-            dailySecretFound = true;
+            dailySecretFound = 'Secret';
             localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
             populateStats();
             return;
@@ -2924,7 +2925,6 @@ function checkSecretCodes(secretCodesArray, char) {
         for (let word of dailySecretWords) {
             if (secretCode.sequence.join('') === word) {
                 makeAlert('Daily Secret Found!', 2000);
-                clearImages();
         
                 const randomIndex = Math.floor(Math.random() * secretAnimations.length);
                 if (secretAnimations[randomIndex].name === 'generateGif') generateGif(word);
@@ -2938,7 +2938,7 @@ function checkSecretCodes(secretCodesArray, char) {
                 }
                 else secretAnimations[randomIndex].func();
 
-                dailySecretFound = true;
+                dailySecretFound = 'Anomaly';
                 localStorage.setItem('dailySecretFound', JSON.stringify(dailySecretFound));
                 stats.dailySecretCount ? stats.dailySecretCount++ : stats.dailySecretCount = 1;
                 localStorage.setItem('stats', JSON.stringify(stats));
@@ -3233,7 +3233,7 @@ function colorBackground() {
 function rotateTiles() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach(tile => {
-        tile.style.animation = 'rotate 3000ms linear';
+        tile.style.animation = 'rotate 1000ms linear';
     });
 }
 
