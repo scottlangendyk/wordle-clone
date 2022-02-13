@@ -2325,13 +2325,13 @@ let targetWord;
 let gameNumber;
 let reloadPriorGuesses = false;
 const secretAnimations = [
-    {name: 'generateGif', func: generateGif},
+    {name: 'rotateTiles', func: rotateTiles},
     {name: 'colorBackground', func: colorBackground},
     {name: 'bounce', func: bounce},
     {name: 'blink', func: blink},
     {name: 'flipEachKey', func: flipEachKey},
     {name: 'multicolorKeyboard', func: multicolorKeyboard},
-    {name: 'rotateTiles', func: rotateTiles},
+    {name: 'generateGif', func: generateGif},
 ];
 const statHolder = {
     // store # of guesses for each game in the gamesPlayed
@@ -2991,8 +2991,15 @@ function checkSecretCodes(secretCodesArray, char) {
             if (secretCode.sequence.join('') === word) {
                 makeAlert('Daily Anomaly Found!', 2000);
         
-                const randomIndex = Math.floor(Math.random() * secretAnimations.length);
-                if (secretAnimations[randomIndex].name === 'generateGif') generateGif(word);
+                // choose a random animation:
+                let randomIndex = Math.floor(Math.random() * secretAnimations.length);
+                if (secretAnimations[randomIndex].name === 'generateGif') {
+                    // gifs are not showing up on mobile, so skip this animation:
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        randomIndex = 0;
+                    }
+                    else generateGif(word);
+                }
                 else if (secretAnimations[randomIndex].name === 'blink') {
                     let count = 0;
                     const interval = setInterval(() => {
