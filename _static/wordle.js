@@ -2359,7 +2359,7 @@ const secretCodes = [
     {key: 'davis', sequence: [], func: davis},
     {key: 'snowy', sequence: [], func: snowy},
     {key: 'arash', sequence: [], func: arash},
-    {key: 'echo', sequence: [], func: echo},
+    {key: 'echos', sequence: [], func: echos},
     {key: 'flips', sequence: [], func: flips},
     {key: 'blurs', sequence: [], func: blurs},
     {key: 'chaos', sequence: [], func: chaos},
@@ -3184,7 +3184,7 @@ function generateGif(word) {
         })
 }
 
-function echo() {
+function echos() {
     let count = 0;
     const interval = setInterval(() => {
         let msg = 'ECHO!';
