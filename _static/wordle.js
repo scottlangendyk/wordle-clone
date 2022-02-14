@@ -2660,7 +2660,7 @@ function startInteraction() {
     document.addEventListener('click', captureKey);
     document.addEventListener('keydown', handleKeyPress);
     document.addEventListener('keydown', captureKey);
-    console.log('Starting User Interation');
+    console.log('Starting User Interaction');
 }
 
 // stop user from adding letters or submitting guesses
@@ -2669,7 +2669,7 @@ function stopInteraction() {
     document.removeEventListener('keydown', handleKeyPress);
     document.removeEventListener('keydown', handleKeyPress);
     document.removeEventListener('keydown', captureKey);
-    console.log('Stopping User Interation');
+    console.log('Stopping User Interaction');
 }
 
 // Fisher-Yates shuffle:
@@ -2821,27 +2821,54 @@ function flipTile(tile, index, duration) {
 function checkGuess(activeTiles, guess) {
     stopInteraction();
     
+    // get the frequency of each letter in the targetWord
     const letterCount = {};
     for (let i = 0; i < targetWord.length; i++) {
         if (letterCount[targetWord[i]] === undefined) {
-            letterCount[targetWord[i]] = 1;
+            letterCount[targetWord[i]] = {count: 1, indexesToSkip: []};
         }
         else {
-            letterCount[targetWord[i]]++;
+            letterCount[targetWord[i]].count++;
+        }
+    }
+    // check each letter of the guess for CORRECT letters first
+    // if correct, set them to class 'correct' and add their index to the "indexToSkip"
+    for (let i = 0; i < guess.length; i++) {
+        if (guess[i] === targetWord[i]) {
+            flipTile(activeTiles[i], i, 250);
+            letterCount[guess[i]].count--;
+            letterCount[guess[i]].indexesToSkip.push(i);
+
+            activeTiles[i].addEventListener('transitionend', () => {
+                activeTiles[i].classList.remove('flip');
+                activeTiles[i].classList.add('correct');
+                activeTiles[i].classList.remove('active');
+
+                if (i === activeTiles.length - 1) {
+                    activeTiles[i].addEventListener('transitionend', doneFlip, false);
+                    activeTiles[i].guess = guess;
+                    activeTiles[i].activeTiles = [...activeTiles];
+                }
+            });
         }
     }
 
+    // do the same thing again, but checking for 'present' letters
+    // if the index is in the 'indexToSkip' for that letter, than pass by it
+    // we have to do this, so we show the correct amount of letters coloured for words with duplicate letters
     for (let i = 0; i < guess.length; i++) {
         flipTile(activeTiles[i], i, 250);
-        
+
         let color = null;
-        if (!letterCount[guess[i]] || letterCount[guess[i]] <= 0) color = 'absent';
-        else {
-            letterCount[guess[i]]--;
-            if (targetWord[i] === guess[i]) color = 'correct';
-            else color = 'present';
-        }
         
+        if (letterCount[guess[i]] === undefined) color = 'absent';
+        else if (!letterCount[guess[i]].indexesToSkip.includes(i) && letterCount[guess[i]].count > 0) {
+            color = 'present';
+            letterCount[guess[i]].count--;
+            letterCount[guess[i]].indexesToSkip.push(i);
+        }
+        else color = 'absent';
+
         activeTiles[i].addEventListener('transitionend', () => {
             activeTiles[i].classList.remove('flip');
             activeTiles[i].classList.add(color);
