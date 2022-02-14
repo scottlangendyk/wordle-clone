@@ -3210,7 +3210,8 @@ function arash() {
 function generateGif(word) {
     const modal = document.querySelector('#crack-modal');
 
-    const api = 'http://api.giphy.com/v1/gifs/search?';
+    // must be HTTPS for some browsers
+    const api = 'https://api.giphy.com/v1/gifs/search?';
     const key = '&api_key=dFRvVTlP2eISiJSn087SVBpGpDNbWNPg';
     const query = `&q=${word}`;
     const url = api + key + query;
