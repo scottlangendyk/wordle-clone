@@ -2452,7 +2452,7 @@ function resultsText() {
     }
     result.trim();
     if (dailySecretFound !== false) result += `\n⭐${dailySecretFound} Found!⭐`
-    return result;
+    return result.trim();
 }
 
 function copyToClipboard() {
