@@ -2363,6 +2363,7 @@ const secretCodes = [
     {key: 'flips', sequence: [], func: flips},
     {key: 'blurs', sequence: [], func: blurs},
     {key: 'chaos', sequence: [], func: chaos},
+    {key: 'covid', sequence: [], func: covid},
 ];
 
 let version = JSON.parse(localStorage.getItem('version')) || 0;
@@ -3031,11 +3032,7 @@ function checkSecretCodes(secretCodesArray, char) {
                 // choose a random animation:
                 let randomIndex = Math.floor(Math.random() * secretAnimations.length);
                 if (secretAnimations[randomIndex].name === 'generateGif') {
-                    // gifs are not showing up on mobile, so skip this animation:
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        randomIndex = 0;
-                    }
-                    else generateGif(word);
+                    generateGif(word);
                 }
                 else if (secretAnimations[randomIndex].name === 'blink') {
                     let count = 0;
@@ -3237,6 +3234,13 @@ function generateGif(word) {
                 generateGif(word);
             }
         })
+}
+
+function covid() {
+    const randNum = Math.random();
+    if (randNum < 0.33) generateGif('covid');
+    else if (randNum < 0.66) generateGif('coronavirus');
+    else if (randNum < 1) generateGif('covid19');
 }
 
 function echos() {
