@@ -127,9 +127,9 @@ function resultsText() {
         else return dark;
     })
     
-    let result = `Shmurdle ${gameNumber} ${tiles.filter(t => t.dataset.letter).length / 5}/6\n\n`
-    for (let i = 0; i < 6; i++) {
-        result += grid.slice(i*5, i*5+5).join('') + "\n";
+    let result = `${GAME_TITLE} ${gameNumber} ${tiles.filter(t => t.dataset.letter).length / 5}/6\n\n`
+    for (let i = 0; i < MAX_GUESSES; i++) {
+        result += grid.slice(i*WORD_LENGTH, i*WORD_LENGTH+WORD_LENGTH).join('') + "\n";
     }
     result.trim();
     if (dailySecretFound !== false) result += `\n⭐${dailySecretFound} Found!⭐`
@@ -142,7 +142,7 @@ function copyToClipboard() {
     // use navigator.share: this will open up the mobile share options 
     if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
         navigator.share({
-            title: `Shmurdle ${gameNumber}`,
+            title: `${GAME_TITLE} ${gameNumber}`,
             text: resultsText()
         }).then(() => {
             console.log('Thanks for sharing!');
